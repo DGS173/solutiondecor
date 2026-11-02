@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DEOGRATIAS SOLUTION DÉCOR – Électroménager, électricité et maison</title>
-<meta name="description" content="Boutique en ligne : télévisions, frigos, cuisinières, groupes électrogènes, matelas et plus. Commande par WhatsApp.">
+<meta name="description" content="Boutique en ligne : télévisions, frigos, cuisinières, groupes électrogènes, matelas et plus. Commande en ligne ou par WhatsApp.">
 <style>
 :root{--bleu:#14315c;--orange:#e8801a;--fond:#f6f7f9;--encre:#1b2433;--gris:#5d6778;--ligne:#dde1e8;--vert:#1f9d55}
 *{box-sizing:border-box;margin:0}
@@ -44,7 +44,7 @@ footer a{color:#fff}
 <body>
 <header><div class="wrap">
 <h1>DEOGRATIAS<br>SOLUTION DÉCOR</h1>
-<p>Électroménager, électricité et équipement pour la maison. Choisissez, puis commandez directement sur WhatsApp.</p>
+<p>Électroménager, électricité et équipement pour la maison. Choisissez votre article, puis envoyez votre commande en quelques secondes.</p>
 <a class="btn wa" id="wa-haut" href="#">Nous écrire sur WhatsApp</a>
 </div></header>
 
@@ -87,8 +87,8 @@ function carte(p){
   const pr = document.createElement("div"); pr.className = "prix";
   pr.textContent = p.prix > 0 ? fcfa(p.prix) : "Prix : nous contacter";
   if (promo){ const s = document.createElement("s"); s.textContent = fcfa(p.ancien_prix); pr.appendChild(s); }
-  const a = document.createElement("a"); a.className = "btn wa"; a.target = "_blank"; a.rel = "noopener";
-  a.href = wa("Bonjour, je souhaite commander : " + p.nom); a.textContent = "Commander";
+  const a = document.createElement("a"); a.className = "btn";
+  a.href = "commande.html?article=" + encodeURIComponent(p.nom); a.textContent = "Commander";
   info.append(h, c, pr, a); el.append(vig, info); return el;
 }
 function afficher(){
