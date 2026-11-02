@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DEOGRATIAS SOLUTION DÉCOR – Électroménager, électricité et maison</title>
+<meta name="description" content="Boutique en ligne : télévisions, frigos, cuisinières, groupes électrogènes, matelas et plus. Commande par WhatsApp.">
+<style>
+:root{--bleu:#14315c;--orange:#e8801a;--fond:#f6f7f9;--encre:#1b2433;--gris:#5d6778;--ligne:#dde1e8;--vert:#1f9d55}
+*{box-sizing:border-box;margin:0}
+body{font-family:Georgia,"Times New Roman",serif;background:var(--fond);color:var(--encre);line-height:1.5}
+h1,h2,h3,button,input,.btn,nav{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:var(--bleu);color:#fff;padding:2.5rem 1.2rem 2rem}
+.wrap{max-width:1000px;margin:0 auto}
+header h1{font-size:clamp(1.6rem,6vw,2.6rem);line-height:1.1;font-weight:800;letter-spacing:-.01em}
+header p{margin:.8rem 0 1.4rem;max-width:34rem;color:#d6deeb}
+.btn{display:inline-block;background:var(--orange);color:#fff;text-decoration:none;font-weight:700;padding:.75rem 1.2rem;border-radius:6px;border:0;font-size:1rem;cursor:pointer}
+.btn:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #8fb8ff;outline-offset:2px}
+.btn.wa{background:var(--vert)}
+.outils{position:sticky;top:0;background:var(--fond);border-bottom:1px solid var(--ligne);padding:.8rem 1.2rem;z-index:5}
+.outils input{width:100%;padding:.7rem .9rem;border:1px solid var(--ligne);border-radius:6px;font-size:1rem}
+.cats{display:flex;gap:.5rem;overflow-x:auto;padding-top:.7rem}
+.cats button{white-space:nowrap;border:1px solid var(--ligne);background:#fff;padding:.4rem .85rem;border-radius:99px;font-size:.9rem;cursor:pointer;color:var(--encre)}
+.cats button[aria-pressed=true]{background:var(--bleu);color:#fff;border-color:var(--bleu)}
+main{padding:1.4rem 1.2rem 3rem}
+main h2{font-size:1.25rem;margin-bottom:1rem}
+.grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1rem}
+.carte{background:#fff;border:1px solid var(--ligne);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.vignette{aspect-ratio:4/3;background:#e6ebf3;display:flex;align-items:center;justify-content:center;font:800 2.6rem system-ui;color:var(--bleu);position:relative}
+.vignette img{width:100%;height:100%;object-fit:cover}
+.promo{position:absolute;top:.6rem;left:.6rem;background:var(--orange);color:#fff;font:700 .8rem system-ui;padding:.2rem .5rem;border-radius:4px}
+.info{padding:.9rem;display:flex;flex-direction:column;gap:.35rem;flex:1}
+.info h3{font-size:1rem}
+.cat{font-size:.82rem;color:var(--gris)}
+.prix{font:700 1.05rem system-ui;color:var(--bleu)}
+.prix s{font-weight:400;color:var(--gris);font-size:.9rem;margin-left:.4rem}
+.info .btn{margin-top:auto;text-align:center;padding:.6rem}
+.vide{color:var(--gris)}
+footer{background:var(--bleu);color:#d6deeb;padding:1.8rem 1.2rem;font-family:system-ui,sans-serif;font-size:.95rem}
+footer a{color:#fff}
+.paiements{margin-top:.6rem;color:#aebbd1;font-size:.88rem}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>DEOGRATIAS<br>SOLUTION DÉCOR</h1>
+<p>Électroménager, électricité et équipement pour la maison. Choisissez, puis commandez directement sur WhatsApp.</p>
+<a class="btn wa" id="wa-haut" href="#">Nous écrire sur WhatsApp</a>
+</div></header>
+
+<div class="outils"><div class="wrap">
+<input id="q" type="search" placeholder="Chercher un article (frigo, TV, matelas…)" aria-label="Chercher un article">
+<div class="cats" id="cats"></div>
+</div></div>
+
+<main><div class="wrap">
+<h2 id="titre">Tous nos articles</h2>
+<div class="grille" id="grille"></div>
+<p class="vide" id="vide" hidden>Aucun article trouvé. Essayez un autre mot ou écrivez-nous sur WhatsApp.</p>
+</div></main>
+
+<footer><div class="wrap">
+<strong>DEOGRATIAS SOLUTION DÉCOR</strong><br>
+Téléphone / WhatsApp : <a href="tel:+2290190637844">01 90 63 78 44</a><br>
+Email : <a href="mailto:deogratiassolutiondecor@gmail.com">deogratiassolutiondecor@gmail.com</a>
+<div class="paiements">Paiement à la livraison, Mobile Money ou carte.</div>
+</div></footer>
+
+<script>
+const NUM = "2290190637844";
+const wa = t => "https://wa.me/" + NUM + "?text=" + encodeURIComponent(t);
+const fcfa = n => n.toLocaleString("fr-FR") + " FCFA";
+document.getElementById("wa-haut").href = wa("Bonjour, je voudrais des informations sur vos articles.");
+let tous = [], cat = "Tous";
+const grille = document.getElementById("grille"), vide = document.getElementById("vide"), q = document.getElementById("q");
+
+function carte(p){
+  const el = document.createElement("article"); el.className = "carte";
+  const promo = p.ancien_prix > p.prix && p.prix > 0;
+  const vig = document.createElement("div"); vig.className = "vignette";
+  if (p.image){ const i = document.createElement("img"); i.src = p.image; i.alt = p.nom; i.loading = "lazy"; vig.appendChild(i); }
+  else vig.textContent = p.nom.charAt(0);
+  if (promo){ const b = document.createElement("span"); b.className = "promo"; b.textContent = "-" + Math.round(100 - p.prix / p.ancien_prix * 100) + " %"; vig.appendChild(b); }
+  const info = document.createElement("div"); info.className = "info";
+  const h = document.createElement("h3"); h.textContent = p.nom;
+  const c = document.createElement("div"); c.className = "cat"; c.textContent = p.categorie;
+  const pr = document.createElement("div"); pr.className = "prix";
+  pr.textContent = p.prix > 0 ? fcfa(p.prix) : "Prix : nous contacter";
+  if (promo){ const s = document.createElement("s"); s.textContent = fcfa(p.ancien_prix); pr.appendChild(s); }
+  const a = document.createElement("a"); a.className = "btn wa"; a.target = "_blank"; a.rel = "noopener";
+  a.href = wa("Bonjour, je souhaite commander : " + p.nom); a.textContent = "Commander";
+  info.append(h, c, pr, a); el.append(vig, info); return el;
+}
+function afficher(){
+  const m = q.value.trim().toLowerCase();
+  const liste = tous.filter(p => (cat === "Tous" || p.categorie === cat) && p.nom.toLowerCase().includes(m));
+  grille.replaceChildren(...liste.map(carte));
+  vide.hidden = liste.length > 0;
+  document.getElementById("titre").textContent = cat === "Tous" ? "Tous nos articles" : cat;
+}
+function categories(){
+  const noms = ["Tous", ...new Set(tous.map(p => p.categorie))];
+  const zone = document.getElementById("cats"); zone.replaceChildren();
+  noms.forEach(n => {
+    const b = document.createElement("button"); b.textContent = n; b.setAttribute("aria-pressed", n === cat);
+    b.onclick = () => { cat = n; categories(); afficher(); };
+    zone.appendChild(b);
+  });
+}
+q.addEventListener("input", afficher);
+fetch("products.json").then(r => r.json()).then(d => { tous = d; categories(); afficher(); })
+  .catch(() => { vide.hidden = false; vide.textContent = "Le catalogue n'a pas pu se charger. Réessayez ou écrivez-nous sur WhatsApp."; });
+</script>
+</body>
+</html>
