@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commander – DEOGRATIAS SOLUTION DÉCOR</title>
+<style>
+:root{--bleu:#14315c;--orange:#e8801a;--fond:#f6f7f9;--encre:#1b2433;--ligne:#dde1e8}
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--fond);color:var(--encre);line-height:1.5}
+header{background:var(--bleu);color:#fff;padding:1.4rem 1.2rem}
+header a{color:#d6deeb;font-size:.95rem}
+header h1{font-size:1.4rem;margin-top:.4rem}
+main{max-width:520px;margin:0 auto;padding:1.4rem 1.2rem 3rem}
+label{display:block;font-weight:600;margin:1rem 0 .35rem}
+input,textarea{width:100%;padding:.75rem .9rem;border:1px solid var(--ligne);border-radius:6px;font:inherit;background:#fff}
+input[readonly]{background:#eef1f6}
+textarea{min-height:90px}
+button{margin-top:1.4rem;width:100%;background:var(--orange);color:#fff;border:0;border-radius:6px;padding:.9rem;font-weight:700;font-size:1rem;cursor:pointer}
+button:disabled{opacity:.6}
+#msg{margin-top:1rem;color:#b3261e}
+</style>
+</head>
+<body>
+<header><a href="index.html">← Retour à la boutique</a><h1>Passer ma commande</h1></header>
+<main>
+<form id="f">
+<input type="hidden" name="access_key" value="VOTRE_CLE_ICI">
+<input type="hidden" name="subject" value="Nouvelle commande – DEOGRATIAS SOLUTION DÉCOR">
+<input type="hidden" name="from_name" value="Site boutique">
+<input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+<label for="article">Article commandé</label>
+<input id="article" name="article" required>
+<label for="nom">Nom complet</label>
+<input id="nom" name="nom_complet" required autocomplete="name">
+<label for="tel">Numéro de téléphone</label>
+<input id="tel" name="telephone" type="tel" required autocomplete="tel" placeholder="Ex : 01 90 00 00 00">
+<label for="adr">Adresse de livraison</label>
+<textarea id="adr" name="adresse_livraison" required placeholder="Ville, quartier, repère"></textarea>
+<button type="submit" id="b">Envoyer ma commande</button>
+<p id="msg" role="status"></p>
+</form>
+</main>
+<script>
+const p = new URLSearchParams(location.search);
+const a = document.getElementById("article");
+if (p.get("article")) { a.value = p.get("article"); a.readOnly = true; }
+const f = document.getElementById("f"), b = document.getElementById("b"), m = document.getElementById("msg");
+f.addEventListener("submit", async e => {
+  e.preventDefault();
+  b.disabled = true; b.textContent = "Envoi en cours…"; m.textContent = "";
+  try {
+    const r = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: {"Content-Type": "application/json", "Accept": "application/json"},
+      body: JSON.stringify(Object.fromEntries(new FormData(f)))
+    });
+    const d = await r.json();
+    if (!d.success) throw new Error();
+    f.innerHTML = "<h2>Commande envoyée</h2><p>Merci ! Nous vous appelons très vite pour confirmer la livraison.</p>";
+  } catch (err) {
+    m.textContent = "L'envoi a échoué. Réessayez ou écrivez-nous sur WhatsApp au 01 90 63 78 44.";
+    b.disabled = false; b.textContent = "Envoyer ma commande";
+  }
+});
+</script>
+</body>
+</html>
