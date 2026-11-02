@@ -1,0 +1,19 @@
+[
+  {"nom": "Poste TV", "categorie": "Électroménager", "prix": 0, "ancien_prix": 0, "image": ""},
+  {"nom": "Machine à coudre", "categorie": "Électroménager", "prix": 0, "ancien_prix": 0, "image": ""},
+  {"nom": "Frigo debout", "categorie": "Froid", "prix": 0, "ancien_prix": 0, "image": ""},
+  {"nom": "Congélateur couché", "categorie": "Froid", "prix": 0, "ancien_prix": 0, "image": ""},
+  {"nom": "Cuisinière à gaz 2 foyers", "categorie": "Cuisine", "prix": 0, "ancien_prix": 0, "image": ""},
+  {"nom": "Cuisinière à gaz 3 foyers", "categorie": "Cuisine", "prix": 0, "ancien_prix": 0, "image": ""},
+  {"nom": "Groupe électrogène essence", "categorie": "Électricité", "prix": 0, "ancien_prix": 0, "image": ""},
+  {"nom": "Ventilateur", "categorie": "Électricité", "prix": 0, "ancien_prix": 0, "image": ""},
+  {"nom": "Brasseur d'air", "categorie": "Électricité", "prix": 0, "ancien_prix": 0, "image": ""},
+  {"nom": "Ampoules", "categorie": "Électricité", "prix": 0, "ancien_prix": 0, "image": ""},
+  {"nom": "Rallonge électrique", "categorie": "Électricité", "prix": 0, "ancien_prix": 0, "image": ""},
+  {"nom": "Woofer d'animation rechargeable", "categorie": "Son", "prix": 0, "ancien_prix": 0, "image": ""},
+  {"nom": "Téléphone à touches", "categorie": "Téléphones", "prix": 0, "ancien_prix": 0, "image": ""},
+  {"nom": "Chargeur", "categorie": "Téléphones", "prix": 0, "ancien_prix": 0, "image": ""},
+  {"nom": "Matelas (venu de France)", "categorie": "Maison", "prix": 0, "ancien_prix": 0, "image": ""},
+  {"nom": "Guéridon", "categorie": "Maison", "prix": 0, "ancien_prix": 0, "image": ""},
+  {"nom": "Classeur à verre", "categorie": "Maison", "prix": 0, "ancien_prix": 0, "image": ""}
+]
