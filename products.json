@@ -98,10 +98,17 @@
  },
  {
   "id": "gueridon-salon",
-  "nom": "Guéridon de salon",
+  "nom": "GUÉRIDON",
   "prix": 27000,
   "ancien": 35000,
-  "image": "images/gueridon-salon.jpg?v=1793701624990"
+  "image": "images/gueridon-salon.jpg?v=1793701624990",
+  "description": "Guéridon de salon disponible à bon prix veuillez passer vos commandes 🎉 dès maintenant. Merci",
+  "photos": [
+   "images/gueridon-salon.jpg?v=1793701624990",
+   "images/gueridon-salon-mw0mrk2l1.jpg",
+   "images/gueridon-salon-mw0mrm2x2.jpg",
+   "images/gueridon-salon-mw0mrnqb3.jpg"
+  ]
  },
  {
   "id": "matelas-2-places",
