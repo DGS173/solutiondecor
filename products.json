@@ -23,9 +23,9 @@
  {
   "id": "tondeuse-2en1",
   "nom": "Tondeuse 2 en 1",
-  "prix": 9500,
+  "prix": 9800,
   "ancien": 12000,
-  "image": "images/tondeuse-2en1.jpg"
+  "image": "images/tondeuse-2en1.jpg?v=1793698523388"
  },
  {
   "id": "tableau-decoration",
