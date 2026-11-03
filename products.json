@@ -37,7 +37,15 @@
   "nom": "Tableau de décoration",
   "prix": 14000,
   "ancien": 15000,
-  "image": "images/tableau-decoration.jpg?v=1793698606574"
+  "image": "images/tableau-decoration.jpg?v=1793698606574",
+  "description": "Vos tables de décoration ensemble de trois à 14000f prix promotionnel.",
+  "photos": [
+   "images/tableau-decoration.jpg?v=1793698606574",
+   "images/tableau-decoration-mw0mmva81.jpg",
+   "images/tableau-decoration-mw0mmxpm2.jpg",
+   "images/tableau-decoration-mw0mmzek3.jpg",
+   "images/tableau-decoration-mw0mn1704.jpg"
+  ]
  },
  {
   "id": "brasseur-neon",
