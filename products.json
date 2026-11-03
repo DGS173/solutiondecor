@@ -58,9 +58,9 @@
  {
   "id": "ventilateur-neon",
   "nom": "Ventilateur néon à commande",
-  "prix": 21000,
+  "prix": 20000,
   "ancien": 25000,
-  "image": "images/ventilateur-neon.jpg"
+  "image": "images/ventilateur-neon.jpg?v=1793699285439"
  },
  {
   "id": "poste-tv",
