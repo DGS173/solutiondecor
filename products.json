@@ -1,5 +1,19 @@
 [
  {
+  "id": "chauffe-eau-3fsa",
+  "nom": "CHAUFFE EAU",
+  "prix": 5000,
+  "ancien": 6500,
+  "description": "Chauffe eau électrique résistant.",
+  "photos": [
+   "images/chauffe-eau-3fsa-mw0n3fsb1.jpg",
+   "images/chauffe-eau-3fsa-mw0n3hx02.jpg",
+   "images/chauffe-eau-3fsa-mw0n3jlk3.jpg",
+   "images/chauffe-eau-3fsa-mw0n3kzj4.jpg"
+  ],
+  "image": "images/chauffe-eau-3fsa-mw0n3fsb1.jpg"
+ },
+ {
   "id": "fleur-decoration",
   "nom": "Fleur de décoration",
   "prix": 1500,
