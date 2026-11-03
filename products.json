@@ -37,9 +37,9 @@
  {
   "id": "brasseur-neon",
   "nom": "Brasseur Néon",
-  "prix": 14000,
-  "ancien": 15000,
-  "image": "images/brasseur-neon.jpg"
+  "prix": 14500,
+  "ancien": 17000,
+  "image": "images/brasseur-neon.jpg?v=1793698642441"
  },
  {
   "id": "batterie-panneau",
