@@ -1,22 +1,142 @@
 [
-  {"id":"fleur-decoration","nom":"Fleur de décoration","prix":1500,"ancien":2500,"image":"images/fleur-decoration.jpg"},
-  {"id":"ampoule-led-1w","nom":"Ampoule LED 1W","prix":500,"ancien":550,"image":"images/ampoule-led-1w.jpg"},
-  {"id":"fer-repasser","nom":"Fer à repasser électrique","prix":5000,"ancien":5500,"image":"images/fer-repasser.jpg"},
-  {"id":"tondeuse-2en1","nom":"Tondeuse 2 en 1","prix":9500,"ancien":12000,"image":"images/tondeuse-2en1.jpg"},
-  {"id":"tableau-decoration","nom":"Tableau de décoration","prix":12500,"ancien":15000,"image":"images/tableau-decoration.jpg"},
-  {"id":"brasseur-neon","nom":"Brasseur Néon","prix":14000,"ancien":15000,"image":"images/brasseur-neon.jpg"},
-  {"id":"batterie-panneau","nom":"Batterie panneau","prix":14000,"ancien":15000,"image":"images/batterie-panneau.jpg"},
-  {"id":"ventilateur-jef","nom":"Ventilateur Jef","prix":16000,"ancien":18000,"image":"images/ventilateur-jef.jpg"},
-  {"id":"ventilateur-neon","nom":"Ventilateur néon à commande","prix":21000,"ancien":25000,"image":"images/ventilateur-neon.jpg"},
-  {"id":"poste-tv","nom":"Poste TV","prix":22000,"ancien":28000,"image":"images/poste-tv.jpg"},
-  {"id":"woofer-son","nom":"Woofer de son","prix":24000,"ancien":25000,"image":"images/woofer-son.jpg"},
-  {"id":"ventilateur-solaire","nom":"Ventilateur solaire avec panneau","prix":25000,"ancien":28000,"image":"images/ventilateur-solaire.jpg"},
-  {"id":"gueridon-salon","nom":"Guéridon de salon","prix":32000,"ancien":35000,"image":"images/gueridon-salon.jpg"},
-  {"id":"matelas-2-places","nom":"Matelas deux places venu de France","prix":48000,"ancien":55000,"image":"images/matelas-2-places.jpg"},
-  {"id":"tv-led","nom":"TV LED économique","prix":52000,"ancien":55000,"image":"images/tv-led.jpg"},
-  {"id":"bas-son-jvc","nom":"Bas de son JVC","prix":60000,"ancien":68000,"image":"images/bas-son-jvc.jpg"},
-  {"id":"machine-coudre-nouveau","nom":"Machine à coudre nouveau modèle","prix":65000,"ancien":70000,"image":"images/machine-coudre-nouveau.jpg"},
-  {"id":"grand-woofer","nom":"Grand woofer rechargeable résistant","prix":70000,"ancien":80000,"image":"images/grand-woofer.jpg"},
-  {"id":"machine-coudre-butterfly","nom":"Machine à coudre Butterfly","prix":75000,"ancien":85000,"image":"images/machine-coudre-butterfly.jpg"},
-  {"id":"groupe-electrogene","nom":"Groupe électrogène essence","prix":140000,"ancien":150000,"image":"images/groupe-electrogene.jpg"}
+ {
+  "id": "fleur-decoration",
+  "nom": "Fleur de décoration",
+  "prix": 1500,
+  "ancien": 3000,
+  "image": "images/fleur-decoration.jpg"
+ },
+ {
+  "id": "ampoule-led-1w",
+  "nom": "Ampoule LED 1W",
+  "prix": 500,
+  "ancien": 550,
+  "image": "images/ampoule-led-1w.jpg"
+ },
+ {
+  "id": "fer-repasser",
+  "nom": "Fer à repasser électrique",
+  "prix": 5000,
+  "ancien": 5500,
+  "image": "images/fer-repasser.jpg"
+ },
+ {
+  "id": "tondeuse-2en1",
+  "nom": "Tondeuse 2 en 1",
+  "prix": 9500,
+  "ancien": 12000,
+  "image": "images/tondeuse-2en1.jpg"
+ },
+ {
+  "id": "tableau-decoration",
+  "nom": "Tableau de décoration",
+  "prix": 12500,
+  "ancien": 15000,
+  "image": "images/tableau-decoration.jpg"
+ },
+ {
+  "id": "brasseur-neon",
+  "nom": "Brasseur Néon",
+  "prix": 14000,
+  "ancien": 15000,
+  "image": "images/brasseur-neon.jpg"
+ },
+ {
+  "id": "batterie-panneau",
+  "nom": "Batterie panneau",
+  "prix": 14000,
+  "ancien": 15000,
+  "image": "images/batterie-panneau.jpg"
+ },
+ {
+  "id": "ventilateur-jef",
+  "nom": "Ventilateur Jef",
+  "prix": 16000,
+  "ancien": 18000,
+  "image": "images/ventilateur-jef.jpg"
+ },
+ {
+  "id": "ventilateur-neon",
+  "nom": "Ventilateur néon à commande",
+  "prix": 21000,
+  "ancien": 25000,
+  "image": "images/ventilateur-neon.jpg"
+ },
+ {
+  "id": "poste-tv",
+  "nom": "Poste TV",
+  "prix": 22000,
+  "ancien": 28000,
+  "image": "images/poste-tv.jpg"
+ },
+ {
+  "id": "woofer-son",
+  "nom": "Woofer de son",
+  "prix": 24000,
+  "ancien": 25000,
+  "image": "images/woofer-son.jpg"
+ },
+ {
+  "id": "ventilateur-solaire",
+  "nom": "Ventilateur solaire avec panneau",
+  "prix": 25000,
+  "ancien": 28000,
+  "image": "images/ventilateur-solaire.jpg"
+ },
+ {
+  "id": "gueridon-salon",
+  "nom": "Guéridon de salon",
+  "prix": 32000,
+  "ancien": 35000,
+  "image": "images/gueridon-salon.jpg"
+ },
+ {
+  "id": "matelas-2-places",
+  "nom": "Matelas deux places venu de France",
+  "prix": 48000,
+  "ancien": 55000,
+  "image": "images/matelas-2-places.jpg"
+ },
+ {
+  "id": "tv-led",
+  "nom": "TV LED économique",
+  "prix": 52000,
+  "ancien": 55000,
+  "image": "images/tv-led.jpg"
+ },
+ {
+  "id": "bas-son-jvc",
+  "nom": "Bas de son JVC",
+  "prix": 60000,
+  "ancien": 68000,
+  "image": "images/bas-son-jvc.jpg"
+ },
+ {
+  "id": "machine-coudre-nouveau",
+  "nom": "Machine à coudre nouveau modèle",
+  "prix": 65000,
+  "ancien": 70000,
+  "image": "images/machine-coudre-nouveau.jpg"
+ },
+ {
+  "id": "grand-woofer",
+  "nom": "Grand woofer rechargeable résistant",
+  "prix": 70000,
+  "ancien": 80000,
+  "image": "images/grand-woofer.jpg"
+ },
+ {
+  "id": "machine-coudre-butterfly",
+  "nom": "Machine à coudre Butterfly",
+  "prix": 75000,
+  "ancien": 85000,
+  "image": "images/machine-coudre-butterfly.jpg"
+ },
+ {
+  "id": "groupe-electrogene",
+  "nom": "Groupe électrogène essence",
+  "prix": 140000,
+  "ancien": 150000,
+  "image": "images/groupe-electrogene.jpg"
+ }
 ]
