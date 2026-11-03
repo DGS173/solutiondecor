@@ -7,8 +7,8 @@
  "logo": "images/logo.png?v=1793699087437",
  "email": {
   "publicKey": "lz3lKf96FmbohO2ry",
-  "serviceId": "service_j04fxxo",
-  "templateId": "__ejs-test-mail-service__"
+  "serviceId": "j04fxxo",
+  "templateId": "ejs-test-mail-service"
  },
  "paiements": {
   "fedapay": {
