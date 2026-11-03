@@ -74,7 +74,7 @@
   "nom": "Woofer de son",
   "prix": 24000,
   "ancien": 25000,
-  "image": "images/woofer-son.jpg"
+  "image": "images/woofer-son.jpg?v=1793701007142"
  },
  {
   "id": "ventilateur-solaire",
