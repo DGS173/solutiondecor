@@ -77,12 +77,13 @@ const f = document.getElementById("form"), msg = document.getElementById("msg"),
 f.article.value = p.get("article") || "";
 f.prix.value = montant ? fmt(montant) : "";
 const mode = () => f.paiement.value;
+let noteWA = "";
 
 function dire(classe, texte){ msg.className = classe; msg.textContent = texte; }
 function texteWhatsApp(extra){
   return "Bonjour, je souhaite commander :\nArticle : " + f.article.value + "\nPrix : " + f.prix.value +
     "\nNom : " + f.nom.value + "\nTéléphone : " + f.telephone.value + "\nAdresse : " + f.adresse.value +
-    "\nPaiement : " + (extra || mode());
+    "\nPaiement : " + (extra || mode()) + noteWA;
 }
 const wa = document.getElementById("wa");
 wa.addEventListener("click", () => { wa.href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(texteWhatsApp()); });
@@ -112,8 +113,9 @@ async function commanderALivraison(){
   bouton.disabled = false;
 }
 
-function payerEnLigne(){
+async function payerEnLigne(){
   if (!montant) { dire("ko", "Le prix de l'article est introuvable. Retournez à la boutique et choisissez l'article à nouveau."); bouton.disabled = false; return; }
+  try { await envoyerEmail("EN ATTENTE : paiement en ligne lancé, à vérifier dans FedaPay"); } catch (e) { console.error(e); }
   const client = { lastname: f.nom.value };
   if (f.email.value) client.email = f.email.value;
   const widget = FedaPay.init({
@@ -123,11 +125,12 @@ function payerEnLigne(){
     customer: client,
     onComplete: async function(resp){
       if (resp.reason === FedaPay.DIALOG_DISMISSED) {
-        dire("ko", "Paiement annulé. Vous pouvez réessayer ou choisir le paiement à la livraison.");
+        noteWA = "\nJ'ai payé en ligne via FedaPay, je vous envoie le SMS de confirmation.";
+        dire("ko", "Fenêtre fermée. Votre commande est enregistrée chez nous. Si vous avez déjà payé, appuyez sur « Commander par WhatsApp » et envoyez-nous le SMS de confirmation. Sinon, vous pouvez réessayer.");
         bouton.disabled = false; return;
       }
       const id = resp.transaction && resp.transaction.id ? " (transaction " + resp.transaction.id + ")" : "";
-      try { await envoyerEmail("En ligne (FedaPay)" + id); } catch (e) { console.error(e); }
+      try { await envoyerEmail("PAYÉ en ligne (FedaPay)" + id); } catch (e) { console.error(e); }
       dire("ok", "Merci " + f.nom.value + ". Votre paiement est reçu. Nous vous appelons très vite pour la livraison.");
       f.reset(); bouton.disabled = false;
     }
