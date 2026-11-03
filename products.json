@@ -1,5 +1,18 @@
 [
  {
+  "id": "moulinex-binatone-985d",
+  "nom": "MOULINEX BINATONE",
+  "prix": 20000,
+  "ancien": 25000,
+  "description": "Moulinex binatone très bon qualitatif résistant",
+  "photos": [
+   "images/moulinex-binatone-985d-mw11985d1.jpg",
+   "images/moulinex-binatone-985d-mw119akh2.jpg",
+   "images/moulinex-binatone-985d-mw119cs83.jpg"
+  ],
+  "image": "images/moulinex-binatone-985d-mw11985d1.jpg"
+ },
+ {
   "id": "iphone-17-pro-copie-5kz8",
   "nom": "iPhone 17 pro COPIE",
   "prix": 50000,
