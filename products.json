@@ -150,7 +150,15 @@
   "nom": "Machine à coudre Butterfly",
   "prix": 75000,
   "ancien": 85000,
-  "image": "images/machine-coudre-butterfly.jpg?v=1793702768184"
+  "image": "images/machine-coudre-butterfly.jpg?v=1793702768184",
+  "description": "Machine a coudre très bon qualité à vendre avec garantie de 3 mois",
+  "photos": [
+   "images/machine-coudre-butterfly.jpg?v=1793702768184",
+   "images/machine-coudre-butterfly-mw0mx5du1.jpg",
+   "images/machine-coudre-butterfly-mw0mx76t2.jpg",
+   "images/machine-coudre-butterfly-mw0mx9133.jpg",
+   "images/machine-coudre-butterfly-mw0mxamn4.jpg"
+  ]
  },
  {
   "id": "groupe-electrogene",
