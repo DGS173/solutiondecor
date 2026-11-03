@@ -4,5 +4,26 @@
  "enTete": "#383eab",
  "fondCouleur": "#000000",
  "fondImage": "",
- "logo": "images/logo.png?v=1793699087437"
+ "logo": "images/logo.png?v=1793699087437",
+ "email": {
+  "publicKey": "lz3lKf96FmbohO2ry",
+  "serviceId": "service_j04fxxo",
+  "templateId": "__ejs-test-mail-service__"
+ },
+ "paiements": {
+  "fedapay": {
+   "actif": true,
+   "publicKey": "pk_live_oKeXX1TaDms3pgEnXHrDCPAE"
+  },
+  "p2": {
+   "actif": false,
+   "nom": "",
+   "lien": ""
+  },
+  "p3": {
+   "actif": false,
+   "nom": "",
+   "lien": ""
+  }
+ }
 }
