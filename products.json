@@ -1,5 +1,18 @@
 [
  {
+  "id": "iphone-17-pro-copie-5kz8",
+  "nom": "iPhone 17 pro COPIE",
+  "prix": 50000,
+  "ancien": 60000,
+  "description": "iPhone 17 pro copie qui gère tout",
+  "photos": [
+   "images/iphone-17-pro-copie-5kz8-mw115kz81.jpg",
+   "images/iphone-17-pro-copie-5kz8-mw115n1m2.jpg",
+   "images/iphone-17-pro-copie-5kz8-mw115oxh3.jpg"
+  ],
+  "image": "images/iphone-17-pro-copie-5kz8-mw115kz81.jpg"
+ },
+ {
   "id": "cuisiniere-a-gaz-kxyo",
   "nom": "Cuisinière à gaz",
   "prix": 14000,
