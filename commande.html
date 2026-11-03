@@ -50,8 +50,7 @@ button:disabled{opacity:.6}
 
   <fieldset>
     <legend>Mode de paiement</legend>
-    <label class="choix"><input type="radio" name="paiement" value="livraison" checked><span>Payer à la livraison<small>Vous payez quand vous recevez l'article.</small></span></label>
-    <label class="choix"><input type="radio" name="paiement" value="en ligne"><span>Payer en ligne<small>Mobile Money ou carte bancaire, via FedaPay.</small></span></label>
+    <div id="modes"></div>
   </fieldset>
 
   <button id="envoyer" type="submit">Envoyer ma commande</button>
@@ -59,90 +58,124 @@ button:disabled{opacity:.6}
   <p id="msg" role="status"></p>
 </form>
 
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script>
 <script src="https://cdn.fedapay.com/checkout.js?v=1.1.7"></script>
 <script>
-/* === À REMPLIR / VÉRIFIER === */
-const EMAILJS_PUBLIC_KEY = "COLLEZ_ICI_PUBLIC_KEY";
-const EMAILJS_SERVICE_ID = "COLLEZ_ICI_SERVICE_ID";
-const EMAILJS_TEMPLATE_ID = "COLLEZ_ICI_TEMPLATE_ID";
-const FEDAPAY_PUBLIC_KEY = "pk_live_oKeXX1TaDms3pgEnXHrDCPAE"; // clé PUBLIQUE uniquement, jamais la clé sk_
 const WHATSAPP = "22990637844";
-/* ============================ */
-
+const DEFAUT = {
+  email: { publicKey: "", serviceId: "", templateId: "" },
+  fedapay: { actif: true, publicKey: "pk_live_oKeXX1TaDms3pgEnXHrDCPAE" },
+  p2: { actif: false, nom: "", lien: "" },
+  p3: { actif: false, nom: "", lien: "" }
+};
+let cfg = JSON.parse(JSON.stringify(DEFAUT));
+const $ = id => document.getElementById(id);
+const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ref = "CMD-" + Date.now().toString(36).toUpperCase();
 const p = new URLSearchParams(location.search);
 const montant = parseInt(p.get("prix"), 10) || 0;
-const fmt = n => Number(n).toLocaleString("fr-FR").replace(/\u202f/g," ") + " F CFA";
-const f = document.getElementById("form"), msg = document.getElementById("msg"), bouton = document.getElementById("envoyer");
+const fmt = n => Number(n).toLocaleString("fr-FR").replace(/\u202f/g, " ") + " F CFA";
+const f = $("form"), msg = $("msg"), bouton = $("envoyer");
 f.article.value = p.get("article") || "";
 f.prix.value = montant ? fmt(montant) : "";
-const mode = () => f.paiement.value;
 let noteWA = "";
-
+const mode = () => (f.paiement && f.paiement.value) || "livraison";
+const libelle = m => m === "livraison" ? "À la livraison" : m === "fedapay" ? "En ligne (FedaPay)" : (cfg[m] && cfg[m].nom) || "Autre paiement";
 function dire(classe, texte){ msg.className = classe; msg.textContent = texte; }
-function texteWhatsApp(extra){
-  return "Bonjour, je souhaite commander :\nArticle : " + f.article.value + "\nPrix : " + f.prix.value +
-    "\nNom : " + f.nom.value + "\nTéléphone : " + f.telephone.value + "\nAdresse : " + f.adresse.value +
-    "\nPaiement : " + (extra || mode()) + noteWA;
-}
-const wa = document.getElementById("wa");
-wa.addEventListener("click", () => { wa.href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(texteWhatsApp()); });
-f.addEventListener("change", () => { bouton.textContent = mode() === "en ligne" ? "Payer en ligne" : "Envoyer ma commande"; });
 
-const emailPret = !EMAILJS_PUBLIC_KEY.startsWith("COLLEZ");
-if (emailPret) emailjs.init({publicKey: EMAILJS_PUBLIC_KEY});
+function construireModes(){
+  const m = [{ v: "livraison", t: "Payer à la livraison", s: "Vous payez quand vous recevez l'article." }];
+  if (cfg.fedapay.actif && cfg.fedapay.publicKey) m.push({ v: "fedapay", t: "Payer en ligne (Mobile Money, carte)", s: "Paiement sécurisé par FedaPay." });
+  ["p2", "p3"].forEach(k => { if (cfg[k].actif && /^https:\/\//i.test(cfg[k].lien || "")) m.push({ v: k, t: cfg[k].nom || "Autre moyen de paiement", s: "Vous serez redirigé vers la page de paiement sécurisée." }); });
+  $("modes").innerHTML = m.map((x, i) => '<label class="choix"><input type="radio" name="paiement" value="' + x.v + '"' + (i === 0 ? " checked" : "") + '><span>' + esc(x.t) + '<small>' + esc(x.s) + '</small></span></label>').join("");
+  majBouton();
+}
+function majBouton(){ bouton.textContent = mode() === "livraison" ? "Envoyer ma commande" : "Continuer vers le paiement"; }
+f.addEventListener("change", majBouton);
+
+function texteWhatsApp(){
+  return "Bonjour, je souhaite commander :\nRéférence : " + ref + "\nArticle : " + f.article.value + "\nPrix : " + f.prix.value +
+    "\nNom : " + f.nom.value + "\nTéléphone : " + f.telephone.value + "\nAdresse : " + f.adresse.value + "\nPaiement : " + libelle(mode()) + noteWA;
+}
+$("wa").addEventListener("click", () => { $("wa").href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(texteWhatsApp()); });
 
 async function envoyerEmail(paiement){
-  if (!emailPret) throw new Error("EmailJS non configuré");
-  await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-    article: f.article.value, prix: f.prix.value, nom: f.nom.value,
-    telephone: f.telephone.value, adresse: f.adresse.value, paiement: paiement
+  const e = cfg.email;
+  if (!e.publicKey || !e.serviceId || !e.templateId) throw new Error("Email non configuré");
+  const r = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ service_id: e.serviceId, template_id: e.templateId, user_id: e.publicKey,
+      template_params: { article: f.article.value, prix: f.prix.value, nom: f.nom.value, telephone: f.telephone.value,
+        adresse: f.adresse.value, paiement: paiement, reference: ref, email_client: f.email.value } })
   });
+  if (!r.ok) throw new Error(await r.text());
 }
 
 async function commanderALivraison(){
   dire("", "Envoi en cours…");
   try {
     await envoyerEmail("À la livraison");
-    dire("ok", "Merci " + f.nom.value + ". Votre commande est bien reçue, nous vous appelons très vite pour confirmer la livraison.");
-    f.reset();
+    dire("ok", "Merci " + f.nom.value + ". Votre commande " + ref + " est bien reçue, nous vous appelons très vite pour confirmer la livraison.");
+    f.reset(); construireModes();
   } catch (err) {
     console.error(err);
-    dire("ko", "L'envoi par email a échoué. Appuyez sur « Commander par WhatsApp » pour nous envoyer votre commande directement.");
+    dire("ko", "L'envoi a échoué. Appuyez sur « Commander par WhatsApp » pour nous envoyer votre commande directement.");
   }
   bouton.disabled = false;
 }
-
-async function payerEnLigne(){
-  if (!montant) { dire("ko", "Le prix de l'article est introuvable. Retournez à la boutique et choisissez l'article à nouveau."); bouton.disabled = false; return; }
-  try { await envoyerEmail("EN ATTENTE : paiement en ligne lancé, à vérifier dans FedaPay"); } catch (e) { console.error(e); }
+function payerFedaPay(){
   const client = { lastname: f.nom.value };
   if (f.email.value) client.email = f.email.value;
-  const widget = FedaPay.init({
-    public_key: FEDAPAY_PUBLIC_KEY,
-    transaction: { amount: montant, description: f.article.value },
+  FedaPay.init({
+    public_key: cfg.fedapay.publicKey,
+    transaction: { amount: montant, description: f.article.value + " " + ref },
     currency: { iso: "XOF" },
     customer: client,
     onComplete: async function(resp){
       if (resp.reason === FedaPay.DIALOG_DISMISSED) {
         noteWA = "\nJ'ai payé en ligne via FedaPay, je vous envoie le SMS de confirmation.";
-        dire("ko", "Fenêtre fermée. Votre commande est enregistrée chez nous. Si vous avez déjà payé, appuyez sur « Commander par WhatsApp » et envoyez-nous le SMS de confirmation. Sinon, vous pouvez réessayer.");
+        dire("ko", "Fenêtre fermée. Votre commande " + ref + " est enregistrée chez nous. Si vous avez déjà payé, appuyez sur « Commander par WhatsApp » et envoyez-nous le SMS de confirmation. Sinon, vous pouvez réessayer.");
         bouton.disabled = false; return;
       }
       const id = resp.transaction && resp.transaction.id ? " (transaction " + resp.transaction.id + ")" : "";
       try { await envoyerEmail("PAYÉ en ligne (FedaPay)" + id); } catch (e) { console.error(e); }
-      dire("ok", "Merci " + f.nom.value + ". Votre paiement est reçu. Nous vous appelons très vite pour la livraison.");
-      f.reset(); bouton.disabled = false;
+      dire("ok", "Merci " + f.nom.value + ". Votre paiement est reçu (commande " + ref + "). Nous vous appelons très vite pour la livraison.");
+      f.reset(); construireModes(); bouton.disabled = false;
     }
-  });
-  widget.open();
+  }).open();
+}
+function payerParLien(k){
+  const v = { montant: montant, article: encodeURIComponent(f.article.value), reference: ref, nom: encodeURIComponent(f.nom.value), telephone: encodeURIComponent(f.telephone.value) };
+  const url = cfg[k].lien.replace(/\{(montant|article|reference|nom|telephone)\}/g, (_, c) => v[c]);
+  if (!/^https:\/\//i.test(url)) { dire("ko", "Le lien de paiement est invalide. Utilisez WhatsApp pour commander."); bouton.disabled = false; return; }
+  noteWA = "\nJ'ai payé via " + libelle(k) + ", référence " + ref + ".";
+  dire("ok", "Votre commande " + ref + " est enregistrée. Redirection vers la page de paiement…");
+  setTimeout(() => { location.href = url; }, 900);
 }
 
-f.addEventListener("submit", e => {
+f.addEventListener("submit", async e => {
   e.preventDefault();
   bouton.disabled = true; dire("", "");
-  if (mode() === "en ligne") payerEnLigne(); else commanderALivraison();
+  const m = mode();
+  if (m === "livraison") return commanderALivraison();
+  if (m === "fedapay" && !montant) { dire("ko", "Le prix de l'article est introuvable. Retournez à la boutique et choisissez l'article à nouveau."); bouton.disabled = false; return; }
+  dire("", "Enregistrement de votre commande…");
+  try { await envoyerEmail("EN ATTENTE : " + libelle(m) + ", à vérifier dans votre espace de paiement"); }
+  catch (err) {
+    console.error(err);
+    dire("ko", "Impossible d'enregistrer votre commande pour le moment. Appuyez sur « Commander par WhatsApp » pour nous l'envoyer directement.");
+    bouton.disabled = false; return;
+  }
+  dire("", "");
+  if (m === "fedapay") payerFedaPay(); else payerParLien(m);
 });
+
+fetch("settings.json?v=" + Date.now()).then(r => r.json()).then(s => {
+  const pa = s.paiements || {};
+  cfg.email = Object.assign({}, DEFAUT.email, s.email || {});
+  cfg.fedapay = Object.assign({}, DEFAUT.fedapay, pa.fedapay || {});
+  cfg.p2 = Object.assign({}, DEFAUT.p2, pa.p2 || {});
+  cfg.p3 = Object.assign({}, DEFAUT.p3, pa.p3 || {});
+}).catch(() => {}).finally(construireModes);
 </script>
 </body>
 </html>
