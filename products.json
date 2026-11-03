@@ -78,10 +78,10 @@
  },
  {
   "id": "ventilateur-solaire",
-  "nom": "Ventilateur solaire avec panneau",
+  "nom": "Ventilateur solaire complet avec son paneau solaire",
   "prix": 25000,
   "ancien": 28000,
-  "image": "images/ventilateur-solaire.jpg"
+  "image": "images/ventilateur-solaire.jpg?v=1793702903720"
  },
  {
   "id": "gueridon-salon",
