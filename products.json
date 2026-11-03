@@ -30,9 +30,9 @@
  {
   "id": "tableau-decoration",
   "nom": "Tableau de décoration",
-  "prix": 12500,
+  "prix": 14000,
   "ancien": 15000,
-  "image": "images/tableau-decoration.jpg"
+  "image": "images/tableau-decoration.jpg?v=1793698606574"
  },
  {
   "id": "brasseur-neon",
