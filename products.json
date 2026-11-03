@@ -4,7 +4,12 @@
   "nom": "Fleur de décoration",
   "prix": 1500,
   "ancien": 3000,
-  "image": "images/fleur-decoration.jpg?v=1793698178889"
+  "image": "images/fleur-decoration.jpg?v=1793698178889",
+  "description": "Fleur de décoration pour vos maison et vos bureaux. Très bon qualité",
+  "photos": [
+   "images/fleur-decoration.jpg?v=1793698178889",
+   "images/fleur-decoration-mw0mjtqt1.jpg"
+  ]
  },
  {
   "id": "ampoule-led-1w",
