@@ -65,9 +65,9 @@
  {
   "id": "poste-tv",
   "nom": "Poste TV",
-  "prix": 22000,
-  "ancien": 28000,
-  "image": "images/poste-tv.jpg"
+  "prix": 20000,
+  "ancien": 27000,
+  "image": "images/poste-tv.jpg?v=1793700317680"
  },
  {
   "id": "woofer-son",
