@@ -35,6 +35,12 @@ nav button.on{background:var(--nuit);color:#fff}
 .actions button{flex:1}
 #msg{font-weight:600;line-height:1.4;margin-top:14px}
 .ok{color:#1f7a45}.ko{color:#b3261e}
+.aide{color:var(--gris);font-size:.88rem;line-height:1.45;margin:6px 0 0}
+.vign{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.vign div{width:84px}
+.vign img{width:84px;height:84px;object-fit:cover;border-radius:8px;background:#eef1f6;display:block}
+.vign button{padding:6px 0;width:100%;font-size:.78rem;margin-top:4px}
+nav button{padding:12px 6px;font-size:.92rem}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -49,7 +55,7 @@ nav button.on{background:var(--nuit);color:#fff}
 </section>
 
 <section id="panneau" hidden>
-  <nav><button data-t="articles" class="on">Articles</button><button data-t="apparence">Apparence</button></nav>
+  <nav><button data-t="articles" class="on">Articles</button><button data-t="apparence">Apparence</button><button data-t="integrations">Intégrations</button></nav>
 
   <div id="t-articles">
     <div class="actions"><button id="ajouter">+ Ajouter un article</button></div>
@@ -59,7 +65,16 @@ nav button.on{background:var(--nuit);color:#fff}
       <label for="e-nom">Nom de l'article</label><input id="e-nom" type="text">
       <label for="e-prix">Prix en F CFA</label><input id="e-prix" type="number" inputmode="numeric" min="0">
       <label for="e-ancien">Ancien prix barré (facultatif)</label><input id="e-ancien" type="number" inputmode="numeric" min="0">
-      <label for="e-photo">Photo (choisissez depuis votre galerie)</label><input id="e-photo" type="file" accept="image/*">
+      <label for="e-desc">Description (fonctionnalités, quelques lignes)</label>
+      <textarea id="e-desc" rows="5" placeholder="Ex. Puissance 1000 W, 3 vitesses, télécommande incluse, garantie 6 mois."></textarea>
+      <label>Photos de l'article (3 à 5 conseillées, 5 maximum)</label>
+      <div id="e-photos" class="vign"></div>
+      <input id="e-photo" type="file" accept="image/*" multiple>
+      <p class="aide">Vous pouvez choisir plusieurs photos d'un coup. Touchez « Principale » pour choisir la photo qui s'affiche en premier.</p>
+      <label for="e-video">Vidéo facultative (MP4, 15 Mo maximum)</label>
+      <input id="e-video" type="file" accept="video/mp4">
+      <p class="aide" id="e-video-etat"></p>
+      <label><input id="e-video-off" type="checkbox"> Retirer la vidéo</label>
       <div class="actions"><button id="e-sauver">Enregistrer</button><button id="e-annuler" class="neutre">Annuler</button><button id="e-suppr" class="danger">Supprimer</button></div>
     </div>
   </div>
@@ -75,6 +90,35 @@ nav button.on{background:var(--nuit);color:#fff}
       <label for="a-logo">Logo</label><input id="a-logo" type="file" accept="image/*">
       <div class="actions"><button id="a-sauver">Enregistrer l'apparence</button></div>
     </div>
+  </div>
+  <div id="t-integrations" hidden>
+    <div class="fiche">
+      <b>Recevoir les commandes par email (EmailJS)</b>
+      <p class="aide">Sur emailjs.com : créez un service email, puis un modèle qui s'envoie à votre adresse. Dans le modèle, utilisez ces variables : {{reference}} {{article}} {{prix}} {{nom}} {{telephone}} {{adresse}} {{paiement}} {{email_client}}.</p>
+      <label for="i-ek">Public Key</label><input id="i-ek" type="text" autocomplete="off">
+      <label for="i-es">Service ID</label><input id="i-es" type="text" autocomplete="off">
+      <label for="i-et">Template ID</label><input id="i-et" type="text" autocomplete="off">
+      <div class="actions"><button id="i-test" class="neutre">Envoyer un email de test</button></div>
+    </div>
+    <div class="fiche">
+      <b>Paiement 1 : FedaPay</b>
+      <label><input id="p1-actif" type="checkbox"> Activer ce paiement</label>
+      <label for="p1-cle">Clé publique FedaPay (commence par pk_)</label><input id="p1-cle" type="text" autocomplete="off">
+    </div>
+    <div class="fiche">
+      <b>Paiement 2 : lien de paiement (ex. FeexPay)</b>
+      <label><input id="p2-actif" type="checkbox"> Activer ce paiement</label>
+      <label for="p2-nom">Nom affiché au client</label><input id="p2-nom" type="text" placeholder="Payer avec FeexPay">
+      <label for="p2-lien">Lien de paiement (https://...)</label><input id="p2-lien" type="text" autocomplete="off">
+    </div>
+    <div class="fiche">
+      <b>Paiement 3 : lien de paiement (ex. crypto)</b>
+      <label><input id="p3-actif" type="checkbox"> Activer ce paiement</label>
+      <label for="p3-nom">Nom affiché au client</label><input id="p3-nom" type="text" placeholder="Payer en crypto">
+      <label for="p3-lien">Lien de paiement (https://...)</label><input id="p3-lien" type="text" autocomplete="off">
+    </div>
+    <p class="aide">Dans un lien, vous pouvez utiliser {montant} {article} {reference} {nom} {telephone}, ils seront remplacés automatiquement. Votre site est visible par tout le monde : ne mettez ici que des clés <b>publiques</b>, jamais une clé secrète (sk_...) ni un token privé.</p>
+    <div class="actions"><button id="i-sauver">Enregistrer les intégrations</button></div>
   </div>
   <div class="actions"><button id="quitter" class="neutre">Se déconnecter</button></div>
 </section>
@@ -133,12 +177,18 @@ async function charger(){
   produits = p ? JSON.parse(p.texte) : []; shaP = p ? p.sha : "";
   const s = await lire("settings.json");
   reglages = s ? JSON.parse(s.texte) : {}; shaR = s ? s.sha : "";
-  afficherListe(); remplirApparence();
+  afficherListe(); remplirApparence(); remplirIntegrations();
 }
 function afficherListe(){
   $("liste").innerHTML = produits.map((p, i) =>
     '<div class="ligne"><img src="' + esc(p.image || "") + '" alt="" onerror="this.style.visibility=\'hidden\'"><div><b>' + esc(p.nom) + '</b><small>' + fmt(p.prix) + (p.ancien > p.prix ? ' (avant ' + fmt(p.ancien) + ')' : '') + '</small></div><button class="neutre" data-i="' + i + '">Modifier</button></div>'
   ).join("") || "<p>Aucun article.</p>";
+}
+let photosEd = [];
+function rendrePhotos(){
+  $("e-photos").innerHTML = photosEd.map((c, i) =>
+    '<div><img src="' + esc(c) + '" alt="Photo ' + (i + 1) + '"><button type="button" class="neutre" data-a="top" data-i="' + i + '">' + (i === 0 ? "Principale" : "★ Principale") + '</button><button type="button" class="danger" data-a="del" data-i="' + i + '">Retirer</button></div>'
+  ).join("") || '<p class="aide">Aucune photo pour le moment.</p>';
 }
 function ouvrirEdition(i){
   courant = i === null ? null : produits[i];
@@ -146,7 +196,11 @@ function ouvrirEdition(i){
   $("e-nom").value = courant ? courant.nom : "";
   $("e-prix").value = courant ? courant.prix : "";
   $("e-ancien").value = courant && courant.ancien > courant.prix ? courant.ancien : "";
-  $("e-photo").value = "";
+  $("e-desc").value = courant ? (courant.description || "") : "";
+  photosEd = courant ? ((courant.photos && courant.photos.length) ? courant.photos.slice() : (courant.image ? [courant.image] : [])) : [];
+  $("e-photo").value = ""; $("e-video").value = ""; $("e-video-off").checked = false;
+  $("e-video-etat").textContent = courant && courant.video ? "Une vidéo est déjà enregistrée pour cet article." : "Aucune vidéo pour le moment.";
+  rendrePhotos();
   $("e-suppr").hidden = !courant;
   $("edition").hidden = false;
   $("edition").scrollIntoView({ behavior: "smooth" });
@@ -155,22 +209,38 @@ async function sauverProduits(msg){
   const r = await ecrire("products.json", enc(JSON.stringify(produits, null, 1)), shaP, msg);
   shaP = r.content.sha;
 }
+function lireB64(file){
+  return new Promise((ok, ko) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(",")[1]); r.onerror = () => ko(new Error("Fichier illisible.")); r.readAsDataURL(file); });
+}
 async function enregistrerArticle(){
   const nom = $("e-nom").value.trim(), prix = parseInt($("e-prix").value, 10);
   const ancien = parseInt($("e-ancien").value, 10) || prix;
   if (!nom || !prix) { dire("Le nom et le prix sont obligatoires.", true); return; }
+  const nouveaux = Array.from($("e-photo").files);
+  if (photosEd.length + nouveaux.length > 5) { dire("5 photos maximum par article. Retirez-en ou choisissez-en moins.", true); return; }
+  const v = $("e-video").files[0];
+  if (v && v.type !== "video/mp4") { dire("La vidéo doit être au format MP4.", true); return; }
+  if (v && v.size > 15 * 1024 * 1024) { dire("La vidéo dépasse 15 Mo. Choisissez un clip plus court (15 à 30 secondes).", true); return; }
   $("e-sauver").disabled = true; dire("Enregistrement en cours…");
   try {
     const nouveau = !courant;
     const p = courant || { id: (slug(nom) || "article") + "-" + Date.now().toString(36).slice(-4) };
-    p.nom = nom; p.prix = prix; p.ancien = ancien;
-    const f = $("e-photo").files[0];
-    if (f) {
-      const chemin = "images/" + p.id + ".jpg";
-      const ex = await gh(chemin);
-      await ecrire(chemin, await reduire(f, 900, "image/jpeg"), ex && ex.sha, "Photo : " + nom);
-      p.image = chemin + "?v=" + Date.now();
-    } else if (!p.image) p.image = "images/" + p.id + ".jpg";
+    p.nom = nom; p.prix = prix; p.ancien = ancien; p.description = $("e-desc").value.trim();
+    const liste = photosEd.slice();
+    let k = 0;
+    for (const f of nouveaux) {
+      k++; dire("Envoi de la photo " + k + " sur " + nouveaux.length + "…");
+      const chemin = "images/" + p.id + "-" + Date.now().toString(36) + k + ".jpg";
+      await ecrire(chemin, await reduire(f, 900, "image/jpeg"), null, "Photo : " + nom);
+      liste.push(chemin);
+    }
+    p.photos = liste; p.image = liste[0] || "";
+    if (v) {
+      dire("Envoi de la vidéo, patientez…");
+      const chemin = "videos/" + p.id + "-" + Date.now().toString(36) + ".mp4";
+      await ecrire(chemin, await lireB64(v), null, "Vidéo : " + nom);
+      p.video = chemin;
+    } else if ($("e-video-off").checked) p.video = "";
     if (nouveau) produits.unshift(p);
     await sauverProduits("Article : " + nom);
     $("edition").hidden = true; afficherListe();
@@ -236,8 +306,58 @@ $("a-sauver").addEventListener("click", enregistrerApparence);
 $("liste").addEventListener("click", e => { const b = e.target.closest("button[data-i]"); if (b) ouvrirEdition(+b.dataset.i); });
 document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => {
   document.querySelectorAll("nav button").forEach(x => x.classList.toggle("on", x === b));
-  $("t-articles").hidden = b.dataset.t !== "articles"; $("t-apparence").hidden = b.dataset.t !== "apparence";
+  ["articles", "apparence", "integrations"].forEach(t => { $("t-" + t).hidden = b.dataset.t !== t; });
 }));
+const PAR_DEFAUT_FEDAPAY = "pk_live_oKeXX1TaDms3pgEnXHrDCPAE";
+function remplirIntegrations(){
+  const e = reglages.email || {}, pa = reglages.paiements || {}, f = pa.fedapay || {}, p2 = pa.p2 || {}, p3 = pa.p3 || {};
+  $("i-ek").value = e.publicKey || ""; $("i-es").value = e.serviceId || ""; $("i-et").value = e.templateId || "";
+  $("p1-actif").checked = f.actif !== false; $("p1-cle").value = f.publicKey || PAR_DEFAUT_FEDAPAY;
+  $("p2-actif").checked = !!p2.actif; $("p2-nom").value = p2.nom || ""; $("p2-lien").value = p2.lien || "";
+  $("p3-actif").checked = !!p3.actif; $("p3-nom").value = p3.nom || ""; $("p3-lien").value = p3.lien || "";
+}
+async function enregistrerIntegrations(){
+  const v = {
+    email: { publicKey: $("i-ek").value.trim(), serviceId: $("i-es").value.trim(), templateId: $("i-et").value.trim() },
+    fedapay: { actif: $("p1-actif").checked, publicKey: $("p1-cle").value.trim() },
+    p2: { actif: $("p2-actif").checked, nom: $("p2-nom").value.trim(), lien: $("p2-lien").value.trim() },
+    p3: { actif: $("p3-actif").checked, nom: $("p3-nom").value.trim(), lien: $("p3-lien").value.trim() }
+  };
+  const textes = [v.email.publicKey, v.email.serviceId, v.email.templateId, v.fedapay.publicKey, v.p2.lien, v.p3.lien];
+  if (textes.some(t => /^sk_|secret/i.test(t))) { dire("Une de ces valeurs ressemble à une clé SECRÈTE. Ne la mettez jamais ici : le site est public. Utilisez uniquement les clés publiques.", true); return; }
+  if (v.fedapay.actif && !/^pk_/.test(v.fedapay.publicKey)) { dire("La clé FedaPay publique doit commencer par pk_.", true); return; }
+  for (const k of ["p2", "p3"]) if (v[k].actif && !/^https:\/\//i.test(v[k].lien)) { dire("Le lien de paiement doit commencer par https://", true); return; }
+  $("i-sauver").disabled = true; dire("Enregistrement en cours…");
+  try {
+    reglages.email = v.email;
+    reglages.paiements = { fedapay: v.fedapay, p2: v.p2, p3: v.p3 };
+    const r = await ecrire("settings.json", enc(JSON.stringify(reglages, null, 1)), shaR, "Intégrations");
+    shaR = r.content.sha;
+    dire("Intégrations enregistrées. Elles sont actives sur le site dans environ une minute.");
+  } catch (e) { dire(e.message, true); }
+  $("i-sauver").disabled = false;
+}
+async function testerEmail(){
+  const k = $("i-ek").value.trim(), sv = $("i-es").value.trim(), t = $("i-et").value.trim();
+  if (!k || !sv || !t) { dire("Remplissez d'abord la Public Key, le Service ID et le Template ID.", true); return; }
+  dire("Envoi du test…");
+  try {
+    const r = await fetch("https://api.emailjs.com/api/v1.0/email/send", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ service_id: sv, template_id: t, user_id: k, template_params: { reference: "CMD-TEST", article: "Article de test", prix: "500 F CFA", nom: "Client test", telephone: "+229 00 00 00 00", adresse: "Adresse de test", paiement: "Test", email_client: "" } }) });
+    const txt = await r.text();
+    if (!r.ok) throw new Error("EmailJS a répondu : " + txt);
+    dire("Email de test envoyé. Vérifiez votre boîte de réception et vos spams.");
+  } catch (e) { dire(e.message, true); }
+}
+$("i-sauver").addEventListener("click", enregistrerIntegrations);
+$("i-test").addEventListener("click", testerEmail);
+$("e-photos").addEventListener("click", e => {
+  const b = e.target.closest("button[data-a]"); if (!b) return;
+  const i = +b.dataset.i;
+  if (b.dataset.a === "del") photosEd.splice(i, 1);
+  else if (i > 0) photosEd.unshift(photosEd.splice(i, 1)[0]);
+  rendrePhotos();
+});
 try { const t = localStorage.getItem("dgs_jeton"); if (t) entrer(t); } catch (e) {}
 </script>
 </body>
