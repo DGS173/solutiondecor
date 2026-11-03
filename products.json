@@ -134,9 +134,9 @@
  },
  {
   "id": "groupe-electrogene",
-  "nom": "Groupe électrogène essence",
-  "prix": 140000,
-  "ancien": 150000,
-  "image": "images/groupe-electrogene.jpg"
+  "nom": "Groupe électrogène essence puissance 2, 5kva",
+  "prix": 145000,
+  "ancien": 160000,
+  "image": "images/groupe-electrogene.jpg?v=1793700158919"
  }
 ]
