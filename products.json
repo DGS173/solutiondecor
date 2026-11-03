@@ -1,5 +1,17 @@
 [
  {
+  "id": "regulateur-20000w-hmx9",
+  "nom": "Régulateur 20000w",
+  "prix": 25000,
+  "ancien": 30000,
+  "description": "Régulateur de 2000w très très puissant et résistant disponible",
+  "photos": [
+   "images/regulateur-20000w-hmx9-mw10hmxc1.jpg",
+   "images/regulateur-20000w-hmx9-mw10hpkm2.jpg"
+  ],
+  "image": "images/regulateur-20000w-hmx9-mw10hmxc1.jpg"
+ },
+ {
   "id": "chauffe-eau-3fsa",
   "nom": "CHAUFFE EAU",
   "prix": 5000,
