@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DEOGRATIAS SOLUTION DÉCOR – Boutique en ligne</title>
 <meta name="description" content="Électroménager, décoration et équipements à Abomey-Calavi. Commandez en ligne, payez à la livraison ou par Mobile Money.">
+<meta property="og:title" content="DEOGRATIAS SOLUTION DÉCOR – Boutique en ligne">
+<meta property="og:description" content="Électroménager, décoration et équipements à Abomey-Calavi. Commandez en ligne.">
+<meta property="og:image" content="https://dgs173.github.io/solutiondecor/images/logo.png">
+<meta property="og:type" content="website">
 <style>
 :root{--nuit:#14305a;--orange:#e8821a;--fond:#f6f7f9;--texte:#1c2433;--gris:#6b7486;--rouge:#c0392b}
 *{box-sizing:border-box}
@@ -37,7 +41,7 @@ main{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:
 .confiance ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
 .confiance li{padding-left:14px;border-left:4px solid var(--orange);line-height:1.45}
 .confiance li b{display:block}
-footer{text-align:center;color:var(--gris);font-size:.9rem;line-height:1.6;padding:20px 16px 30px;background:rgba(255,255,255,.92)}
+footer{text-align:center;color:var(--gris);font-size:.9rem;line-height:1.6;padding:20px 16px 96px;background:rgba(255,255,255,.92)}
 footer a{color:var(--nuit);font-weight:600}
 
 .nb{position:absolute;left:8px;bottom:8px;z-index:2;background:rgba(0,0,0,.68);color:#fff;font-size:.75rem;padding:3px 8px;border-radius:6px}
@@ -64,6 +68,30 @@ footer a{color:var(--nuit);font-weight:600}
 .corps{padding:16px 18px 24px}
 .corps h2{margin:0 0 6px;font-size:1.2rem;color:var(--nuit)}
 .corps .detail{margin:12px 0 16px;line-height:1.55;white-space:normal}
+
+button.btn{border:0;font:inherit;font-weight:700;cursor:pointer;width:100%}
+.qte{display:flex;align-items:center;gap:6px}
+.qte button{width:40px;height:40px;border:1px solid #d5dae3;border-radius:10px;background:#fff;font-size:1.2rem;cursor:pointer;color:var(--texte)}
+.qte output{min-width:30px;text-align:center;font-weight:700}
+.qte button:focus-visible,#b-voir:focus-visible,.partage a:focus-visible,.partage button:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+#barre{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:var(--nuit);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 -4px 14px rgba(0,0,0,.22);font-weight:600}
+#barre[hidden]{display:none}
+#b-voir{background:var(--orange);color:#fff;border:0;border-radius:10px;padding:12px 16px;font:inherit;font-weight:700;cursor:pointer}
+#toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);max-width:90vw;text-align:center;background:#1c2433;color:#fff;padding:10px 16px;border-radius:999px;z-index:70;font-size:.9rem}
+#toast[hidden]{display:none}
+#panier{position:fixed;inset:0;z-index:55;background:rgba(10,18,32,.8);display:flex;align-items:flex-end;justify-content:center}
+#panier[hidden]{display:none}
+.tete{display:flex;justify-content:space-between;align-items:center}
+.tete button{width:44px;height:44px;border:0;border-radius:50%;background:#eef1f6;font-size:1.1rem;cursor:pointer}
+.ligne{display:flex;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #e3e7ee;flex-wrap:wrap}
+.ligne .l-nom{flex:1 1 100%;font-weight:600;line-height:1.3}
+.ligne small{display:block;color:var(--gris);font-weight:400}
+.ligne .voir{margin-left:auto}
+.total{display:flex;justify-content:space-between;font-weight:800;font-size:1.1rem;padding:14px 0}
+.partage{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px}
+.partage span{width:100%;color:var(--gris);font-size:.85rem}
+.partage a,.partage button{border:1px solid #d5dae3;border-radius:999px;padding:9px 14px;background:#fff;color:var(--texte);font:inherit;font-size:.88rem;font-weight:600;text-decoration:none;cursor:pointer}
+.partage [hidden]{display:none}
 </style>
 </head>
 <body>
@@ -110,9 +138,27 @@ footer a{color:var(--nuit);font-weight:600}
       <h2 id="f-nom"></h2>
       <div id="f-prix"></div>
       <div class="detail" id="f-desc"></div>
-      <a class="btn" id="f-cmd" href="#">Commander</a>
+      <div class="qte" id="f-qte" data-q=""><button type="button" data-d="-1" aria-label="Moins">−</button><output id="f-q">1</output><button type="button" data-d="1" aria-label="Plus">+</button></div>
+      <button type="button" class="btn" id="f-ajout" data-add="" style="margin-top:12px">Ajouter au panier</button>
+      <div class="partage"><span>Partager cet article :</span>
+        <a id="s-wa" href="#" target="_blank" rel="noopener">WhatsApp</a>
+        <a id="s-fb" href="#" target="_blank" rel="noopener">Facebook</a>
+        <button type="button" id="s-natif">TikTok et autres</button>
+        <button type="button" id="s-copier">Copier le lien</button>
+      </div>
     </div>
   </div>
+</div>
+<div id="barre" hidden><span id="b-texte"></span><button type="button" id="b-voir">Voir mon panier</button></div>
+<div id="toast" role="status" hidden></div>
+<div id="panier" role="dialog" aria-modal="true" aria-labelledby="p-titre" hidden>
+  <div class="feuille"><div class="corps">
+    <div class="tete"><h2 id="p-titre" style="margin:0">Mon panier</h2><button type="button" id="p-fermer" aria-label="Fermer le panier">✕</button></div>
+    <div id="p-lignes"></div>
+    <div class="total"><span>Total</span><span id="p-total"></span></div>
+    <a class="btn" id="p-cmd" href="commande.html">Passer la commande</a>
+    <button type="button" class="voir" id="p-vider" style="margin-top:10px">Vider le panier</button>
+  </div></div>
 </div>
 <script>
 const $ = id => document.getElementById(id);
@@ -150,7 +196,8 @@ function afficher(filtre){
       (p.description ? '<div class="desc">' + esc(p.description) + '</div>' : '') +
       '<div>' + prixHtml(p) + '</div>' +
       '<button type="button" class="voir" data-id="' + esc(p.id) + '">Voir les photos et détails</button>' +
-      '<a class="btn" href="' + esc(lienCmd(p)) + '">Commander</a></div></article>';
+      '<div class="qte" data-q="' + esc(p.id) + '"><button type="button" data-d="-1" aria-label="Moins">−</button><output>' + (choix[p.id] || 1) + '</output><button type="button" data-d="1" aria-label="Plus">+</button></div>' +
+      '<button type="button" class="btn" data-add="' + esc(p.id) + '">Ajouter au panier</button></div></article>';
   }).join("");
 }
 
@@ -184,7 +231,9 @@ function ouvrir(id){
   $("f-prix").innerHTML = prixHtml(p);
   $("f-desc").innerHTML = p.description ? esc(p.description).replace(/\n/g, "<br>") : "";
   $("f-desc").hidden = !p.description;
-  $("f-cmd").href = lienCmd(p);
+  $("f-qte").dataset.q = p.id; $("f-q").textContent = choix[p.id] || 1; $("f-ajout").dataset.add = p.id;
+  $("s-wa").href = "https://wa.me/?text=" + encodeURIComponent(texteArticle(p));
+  $("s-fb").href = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(urlArticle(p));
   $("fiche").hidden = false;
   document.body.style.overflow = "hidden";
   maj();
@@ -212,8 +261,78 @@ document.addEventListener("keydown", e => {
   if (e.key === "ArrowRight") aller(idx + 1);
   if (e.key === "ArrowLeft") aller(idx - 1);
 });
+/* ---- Panier ---- */
+const choix = {};
+let panier = [];
+try { panier = JSON.parse(localStorage.getItem("dgs_panier") || "[]"); } catch (e) {}
+let tempo = null;
+function toast(t){ const el = $("toast"); el.textContent = t; el.hidden = false; clearTimeout(tempo); tempo = setTimeout(() => { el.hidden = true; }, 2300); }
+const totalPanier = () => panier.reduce((s, l) => s + l.prix * l.qte, 0);
+const nbPanier = () => panier.reduce((s, l) => s + l.qte, 0);
+function majBarre(){
+  const n = nbPanier();
+  $("barre").hidden = n === 0;
+  $("b-texte").textContent = n + (n > 1 ? " articles" : " article") + " · " + fmt(totalPanier());
+}
+function sauverPanier(){ try { localStorage.setItem("dgs_panier", JSON.stringify(panier)); } catch (e) {} majBarre(); if (!$("panier").hidden) rendrePanier(); }
+function reconcilier(){
+  panier = panier.filter(l => produits.some(p => p.id === l.id)).map(l => { const p = produits.find(x => x.id === l.id); return { id: l.id, nom: p.nom, prix: p.prix, qte: Math.max(1, Math.min(10, l.qte)) }; });
+  sauverPanier();
+}
+function ajouter(id, q){
+  const p = produits.find(x => x.id === id); if (!p) return;
+  const l = panier.find(x => x.id === id);
+  let t = q + " × " + p.nom + " ajouté au panier";
+  if (l) { const n = l.qte + q; if (n > 10) { l.qte = 10; t = "Maximum 10 par article : " + p.nom; } else l.qte = n; l.nom = p.nom; l.prix = p.prix; }
+  else panier.push({ id: p.id, nom: p.nom, prix: p.prix, qte: q });
+  choix[id] = 1;
+  document.querySelectorAll('.qte[data-q="' + CSS.escape(id) + '"] output').forEach(o => { o.textContent = 1; });
+  sauverPanier(); toast(t);
+}
+function rendrePanier(){
+  if (!panier.length) { $("p-lignes").innerHTML = '<p class="vide">Votre panier est vide.</p>'; $("p-total").textContent = fmt(0); $("p-cmd").hidden = true; return; }
+  $("p-cmd").hidden = false;
+  $("p-lignes").innerHTML = panier.map(l =>
+    '<div class="ligne"><div class="l-nom">' + esc(l.nom) + '<small>' + fmt(l.prix) + ' × ' + l.qte + ' = ' + fmt(l.prix * l.qte) + '</small></div>' +
+    '<div class="qte"><button type="button" data-pm="' + esc(l.id) + '" aria-label="Moins">−</button><output>' + l.qte + '</output><button type="button" data-pp="' + esc(l.id) + '" aria-label="Plus">+</button></div>' +
+    '<button type="button" class="voir" data-pd="' + esc(l.id) + '" aria-label="Retirer ' + esc(l.nom) + '">Retirer</button></div>').join("");
+  $("p-total").textContent = fmt(totalPanier());
+}
+function ouvrirPanier(){ rendrePanier(); $("panier").hidden = false; document.body.style.overflow = "hidden"; $("p-fermer").focus(); }
+function fermerPanier(){ $("panier").hidden = true; document.body.style.overflow = ""; }
+document.addEventListener("click", e => {
+  const t = e.target;
+  const q = t.closest(".qte button[data-d]");
+  if (q) {
+    const id = q.closest(".qte").dataset.q;
+    choix[id] = Math.max(1, Math.min(10, (choix[id] || 1) + (+q.dataset.d)));
+    document.querySelectorAll('.qte[data-q="' + CSS.escape(id) + '"] output').forEach(o => { o.textContent = choix[id]; });
+    return;
+  }
+  const a = t.closest("[data-add]"); if (a && a.dataset.add) { ajouter(a.dataset.add, choix[a.dataset.add] || 1); return; }
+  const m = t.closest("[data-pm]"), pl = t.closest("[data-pp]"), d = t.closest("[data-pd]");
+  const id = (m && m.dataset.pm) || (pl && pl.dataset.pp) || (d && d.dataset.pd);
+  if (id) {
+    const l = panier.find(x => x.id === id);
+    if (l) { if (m) l.qte = Math.max(1, l.qte - 1); if (pl) l.qte = Math.min(10, l.qte + 1); if (d) panier = panier.filter(x => x !== l); sauverPanier(); }
+  }
+});
+$("b-voir").addEventListener("click", ouvrirPanier);
+$("p-fermer").addEventListener("click", fermerPanier);
+$("panier").addEventListener("click", e => { if (e.target === $("panier")) fermerPanier(); });
+$("p-vider").addEventListener("click", () => { panier = []; sauverPanier(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("panier").hidden) fermerPanier(); });
+
+/* ---- Partage ---- */
+const urlArticle = p => new URL("index.html?article=" + encodeURIComponent(p.id), location.href).href;
+const texteArticle = p => p.nom + " – " + fmt(p.prix) + ". Commandez ici : " + urlArticle(p);
+async function copier(t){ try { await navigator.clipboard.writeText(t); toast("Lien copié"); } catch (e) { window.prompt("Copiez ce lien :", t); } }
+$("s-natif").addEventListener("click", async () => { if (!cur) return; try { await navigator.share({ title: cur.nom, text: cur.nom + " – " + fmt(cur.prix), url: urlArticle(cur) }); } catch (e) {} });
+$("s-copier").addEventListener("click", () => { if (cur) copier(urlArticle(cur)); });
+if (!navigator.share) $("s-natif").hidden = true;
+
 fetch("settings.json?v=" + minute).then(r => r.json()).then(appliquer).catch(() => {});
-fetch("products.json?v=" + minute).then(r => r.json()).then(d => { produits = d; afficher(); })
+fetch("products.json?v=" + minute).then(r => r.json()).then(d => { produits = d; reconcilier(); afficher(); const a = new URLSearchParams(location.search).get("article"); if (a) ouvrir(a); })
   .catch(() => { $("liste").innerHTML = '<p class="vide">Impossible de charger les articles. Actualisez la page.</p>'; });
 $("recherche").addEventListener("input", e => afficher(e.target.value));
 </script>
