@@ -21,7 +21,7 @@ header p{margin:0;color:#d5def0;font-size:.95rem;line-height:1.45;max-width:70ch
 .barre input{width:100%;padding:12px 14px;border:1px solid #d5dae3;border-radius:10px;font-size:1rem;background:#fff}
 main{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;padding:16px;max-width:1100px;margin:auto}
 .carte{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e3e7ee;display:flex;flex-direction:column}
-.photo{position:relative;aspect-ratio:1/1;background:#eef1f6}
+.photo{position:relative;aspect-ratio:1/1;background:#eef1f6;border:0;padding:0;width:100%;display:block;cursor:pointer}
 .photo::before{content:'Photo bientôt disponible';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;font-size:.85rem;color:var(--gris)}
 .photo img{position:relative;width:100%;height:100%;object-fit:contain;background:#fff;display:block}
 .promo{position:absolute;top:8px;left:8px;z-index:2;background:var(--rouge);color:#fff;font-size:.78rem;font-weight:700;padding:3px 8px;border-radius:6px}
@@ -39,6 +39,31 @@ main{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:
 .confiance li b{display:block}
 footer{text-align:center;color:var(--gris);font-size:.9rem;line-height:1.6;padding:20px 16px 30px;background:rgba(255,255,255,.92)}
 footer a{color:var(--nuit);font-weight:600}
+
+.nb{position:absolute;left:8px;bottom:8px;z-index:2;background:rgba(0,0,0,.68);color:#fff;font-size:.75rem;padding:3px 8px;border-radius:6px}
+.desc{color:var(--gris);font-size:.85rem;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.voir{background:none;border:0;padding:4px 0;color:var(--nuit);font:inherit;font-weight:600;font-size:.88rem;text-align:left;cursor:pointer;text-decoration:underline}
+.voir:focus-visible,.photo:focus-visible,.fleche:focus-visible,.fermer:focus-visible,.vignettes button:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+#fiche{position:fixed;inset:0;z-index:50;background:rgba(10,18,32,.8);display:flex;align-items:flex-end;justify-content:center}
+#fiche[hidden]{display:none}
+.feuille{background:#fff;width:100%;max-width:640px;max-height:95vh;overflow:auto;border-radius:18px 18px 0 0}
+.galerie{position:relative;background:#0f1726}
+.pistes{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.pistes::-webkit-scrollbar{display:none}
+.piste{flex:0 0 100%;scroll-snap-align:center;aspect-ratio:1/1;max-height:62vh;display:flex;align-items:center;justify-content:center}
+.piste img,.piste video{width:100%;height:100%;object-fit:contain}
+.fleche{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.9);font-size:1.5rem;line-height:1;cursor:pointer}
+.fleche.g{left:8px}.fleche.d{right:8px}
+.fermer{position:absolute;top:10px;right:10px;z-index:3;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.92);font-size:1.1rem;cursor:pointer}
+.compteur{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.68);color:#fff;font-size:.8rem;padding:3px 10px;border-radius:999px}
+.vignettes{display:flex;gap:8px;overflow-x:auto;padding:10px 12px;background:#0f1726}
+.vignettes:empty{display:none}
+.vignettes button{flex:none;width:56px;height:56px;border:2px solid transparent;border-radius:8px;padding:0;background:#fff;overflow:hidden;font-size:1.2rem;cursor:pointer}
+.vignettes button.on{border-color:var(--orange)}
+.vignettes img{width:100%;height:100%;object-fit:cover;display:block}
+.corps{padding:16px 18px 24px}
+.corps h2{margin:0 0 6px;font-size:1.2rem;color:var(--nuit)}
+.corps .detail{margin:12px 0 16px;line-height:1.55;white-space:normal}
 </style>
 </head>
 <body>
@@ -71,6 +96,24 @@ footer a{color:var(--nuit);font-weight:600}
   Îlot C/sb, Zinvié-Fandji, Abomey-Calavi, Bénin<br>
   RCCM : RB/ABC/26 A 137063 · IFU : 0202333944884
 </footer>
+<div id="fiche" role="dialog" aria-modal="true" aria-labelledby="f-nom" hidden>
+  <div class="feuille">
+    <div class="galerie">
+      <button type="button" class="fermer" id="f-fermer" aria-label="Fermer">✕</button>
+      <div class="pistes" id="f-pistes" tabindex="0" aria-label="Photos de l'article"></div>
+      <button type="button" class="fleche g" id="f-g" aria-label="Photo précédente">‹</button>
+      <button type="button" class="fleche d" id="f-d" aria-label="Photo suivante">›</button>
+      <span class="compteur" id="f-compteur" aria-live="polite"></span>
+    </div>
+    <div class="vignettes" id="f-vignettes"></div>
+    <div class="corps">
+      <h2 id="f-nom"></h2>
+      <div id="f-prix"></div>
+      <div class="detail" id="f-desc"></div>
+      <a class="btn" id="f-cmd" href="#">Commander</a>
+    </div>
+  </div>
+</div>
 <script>
 const $ = id => document.getElementById(id);
 const fmt = n => n.toLocaleString("fr-FR").replace(/\u202f/g," ") + " F CFA";
@@ -86,21 +129,89 @@ function appliquer(s){
   if (s.fondCouleur) document.body.style.backgroundColor = s.fondCouleur;
   if (s.fondImage) { const b = document.body.style; b.backgroundImage = "url('" + s.fondImage + "')"; b.backgroundSize = "cover"; b.backgroundPosition = "center"; }
 }
+const photosDe = p => ((p.photos && p.photos.length) ? p.photos : [p.image]).filter(Boolean);
+const lienCmd = p => "commande.html?article=" + encodeURIComponent(p.nom) + "&prix=" + p.prix;
+function prixHtml(p){
+  const remise = p.ancien > p.prix ? Math.round((1 - p.prix/p.ancien)*100) : 0;
+  return '<span class="prix">' + fmt(p.prix) + '</span>' + (remise ? '<span class="ancien">' + fmt(p.ancien) + '</span>' : '');
+}
 function afficher(filtre){
   const f = (filtre || "").trim().toLowerCase();
   const liste = produits.filter(p => p.nom.toLowerCase().includes(f));
   if (!liste.length) { $("liste").innerHTML = '<p class="vide">Aucun article trouvé. Écrivez-nous sur WhatsApp, nous pouvons peut-être le commander pour vous.</p>'; return; }
   $("liste").innerHTML = liste.map(p => {
+    const ph = photosDe(p);
     const remise = p.ancien > p.prix ? Math.round((1 - p.prix/p.ancien)*100) : 0;
-    const lien = "commande.html?article=" + encodeURIComponent(p.nom) + "&prix=" + p.prix;
-    return '<article class="carte"><div class="photo">' +
-      '<img src="' + esc(p.image) + '" alt="' + esc(p.nom) + '" width="268" height="268" loading="lazy" decoding="async" onerror="this.remove()">' +
-      (remise ? '<span class="promo">-' + remise + '%</span>' : '') + '</div>' +
+    const badge = [ph.length > 1 ? ph.length + " photos" : "", p.video ? "Vidéo" : ""].filter(Boolean).join(" · ");
+    return '<article class="carte"><button type="button" class="photo" data-id="' + esc(p.id) + '" aria-label="Voir les photos de ' + esc(p.nom) + '">' +
+      (ph[0] ? '<img src="' + esc(ph[0]) + '" alt="" width="268" height="268" loading="lazy" decoding="async" onerror="this.remove()">' : '') +
+      (remise ? '<span class="promo">-' + remise + '%</span>' : '') + (badge ? '<span class="nb">' + badge + '</span>' : '') + '</button>' +
       '<div class="infos"><div class="nom">' + esc(p.nom) + '</div>' +
-      '<div><span class="prix">' + fmt(p.prix) + '</span>' + (remise ? '<span class="ancien">' + fmt(p.ancien) + '</span>' : '') + '</div>' +
-      '<a class="btn" href="' + lien + '">Commander</a></div></article>';
+      (p.description ? '<div class="desc">' + esc(p.description) + '</div>' : '') +
+      '<div>' + prixHtml(p) + '</div>' +
+      '<button type="button" class="voir" data-id="' + esc(p.id) + '">Voir les photos et détails</button>' +
+      '<a class="btn" href="' + esc(lienCmd(p)) + '">Commander</a></div></article>';
   }).join("");
 }
+
+/* ---- Fiche article : galerie à faire défiler ---- */
+let cur = null, idx = 0, total = 0, retour = null;
+function maj(){
+  $("f-compteur").textContent = (idx + 1) + " / " + total;
+  $("f-g").hidden = $("f-d").hidden = total < 2;
+  $("f-compteur").hidden = total < 2;
+  document.querySelectorAll("#f-vignettes button").forEach((b, i) => b.classList.toggle("on", i === idx));
+}
+function aller(i){
+  i = Math.max(0, Math.min(total - 1, i));
+  const el = $("f-pistes");
+  el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+}
+function ouvrir(id){
+  const p = produits.find(x => x.id === id); if (!p) return;
+  cur = p; retour = document.activeElement;
+  const ph = photosDe(p);
+  const pistes = ph.map(src => '<div class="piste"><img src="' + esc(src) + '" alt="' + esc(p.nom) + '" decoding="async"></div>');
+  if (p.video) pistes.push('<div class="piste"><video src="' + esc(p.video) + '" controls playsinline preload="metadata"></video></div>');
+  total = pistes.length; idx = 0;
+  $("f-pistes").innerHTML = pistes.join("");
+  $("f-pistes").scrollLeft = 0;
+  $("f-vignettes").innerHTML = total > 1
+    ? ph.map((src, i) => '<button type="button" data-v="' + i + '" aria-label="Photo ' + (i + 1) + '"><img src="' + esc(src) + '" alt=""></button>').join("") +
+      (p.video ? '<button type="button" data-v="' + ph.length + '" aria-label="Vidéo">▶</button>' : "")
+    : "";
+  $("f-nom").textContent = p.nom;
+  $("f-prix").innerHTML = prixHtml(p);
+  $("f-desc").innerHTML = p.description ? esc(p.description).replace(/\n/g, "<br>") : "";
+  $("f-desc").hidden = !p.description;
+  $("f-cmd").href = lienCmd(p);
+  $("fiche").hidden = false;
+  document.body.style.overflow = "hidden";
+  maj();
+  $("f-fermer").focus();
+}
+function fermer(){
+  $("fiche").hidden = true; $("f-pistes").innerHTML = "";
+  document.body.style.overflow = "";
+  if (retour) retour.focus();
+}
+$("f-pistes").addEventListener("scroll", () => {
+  const w = $("f-pistes").clientWidth; if (!w) return;
+  const n = Math.round($("f-pistes").scrollLeft / w);
+  if (n !== idx) { idx = n; maj(); }
+});
+$("f-g").addEventListener("click", () => aller(idx - 1));
+$("f-d").addEventListener("click", () => aller(idx + 1));
+$("f-fermer").addEventListener("click", fermer);
+$("fiche").addEventListener("click", e => { if (e.target === $("fiche")) fermer(); });
+$("f-vignettes").addEventListener("click", e => { const b = e.target.closest("button[data-v]"); if (b) aller(+b.dataset.v); });
+$("liste").addEventListener("click", e => { const b = e.target.closest("[data-id]"); if (b) ouvrir(b.dataset.id); });
+document.addEventListener("keydown", e => {
+  if ($("fiche").hidden) return;
+  if (e.key === "Escape") fermer();
+  if (e.key === "ArrowRight") aller(idx + 1);
+  if (e.key === "ArrowLeft") aller(idx - 1);
+});
 fetch("settings.json?v=" + minute).then(r => r.json()).then(appliquer).catch(() => {});
 fetch("products.json?v=" + minute).then(r => r.json()).then(d => { produits = d; afficher(); })
   .catch(() => { $("liste").innerHTML = '<p class="vide">Impossible de charger les articles. Actualisez la page.</p>'; });
