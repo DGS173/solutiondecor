@@ -3,65 +3,142 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Commander – DEOGRATIAS SOLUTION DÉCOR</title>
+<title>Passer ma commande – DEOGRATIAS SOLUTION DÉCOR</title>
 <style>
-:root{--bleu:#14315c;--orange:#e8801a;--fond:#f6f7f9;--encre:#1b2433;--ligne:#dde1e8}
-*{box-sizing:border-box;margin:0}
-body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--fond);color:var(--encre);line-height:1.5}
-header{background:var(--bleu);color:#fff;padding:1.4rem 1.2rem}
-header a{color:#d6deeb;font-size:.95rem}
-header h1{font-size:1.4rem;margin-top:.4rem}
-main{max-width:520px;margin:0 auto;padding:1.4rem 1.2rem 3rem}
-label{display:block;font-weight:600;margin:1rem 0 .35rem}
-input,textarea{width:100%;padding:.75rem .9rem;border:1px solid var(--ligne);border-radius:6px;font:inherit;background:#fff}
+:root{--nuit:#14305a;--orange:#e8821a;--fond:#f6f7f9;--texte:#1c2433;--gris:#6b7486}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--fond);color:var(--texte)}
+header{background:var(--nuit);color:#fff;padding:22px 18px}
+header a{color:#c9d4e8;font-size:.95rem}
+header h1{margin:12px 0 0;font-size:1.4rem}
+form{max-width:560px;margin:auto;padding:20px 18px 30px}
+label,legend{display:block;font-weight:700;margin:18px 0 6px;padding:0}
+input[type=text],input[type=tel],input[type=email],input:not([type]),textarea{width:100%;padding:13px;border:1px solid #d5dae3;border-radius:10px;font:inherit;background:#fff}
 input[readonly]{background:#eef1f6}
 textarea{min-height:90px}
-button{margin-top:1.4rem;width:100%;background:var(--orange);color:#fff;border:0;border-radius:6px;padding:.9rem;font-weight:700;font-size:1rem;cursor:pointer}
+fieldset{border:0;padding:0;margin:0}
+.choix{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid #d5dae3;border-radius:10px;padding:12px;margin-top:8px;font-weight:600;cursor:pointer}
+.choix small{display:block;font-weight:400;color:var(--gris);margin-top:2px}
+.choix input{margin-top:4px;flex:none}
+input:focus-visible,textarea:focus-visible,button:focus-visible,.wa:focus-visible{outline:3px solid var(--nuit);outline-offset:2px}
+button,.wa{display:block;width:100%;text-align:center;border:0;border-radius:10px;padding:15px;font:inherit;font-weight:700;color:#fff;text-decoration:none;margin-top:18px;cursor:pointer}
+button{background:var(--orange)}
 button:disabled{opacity:.6}
-#msg{margin-top:1rem;color:#b3261e}
+.wa{background:#1f8f4e}
+#msg{margin-top:16px;font-weight:600;line-height:1.4}
+.ok{color:#1f7a45}.ko{color:#b3261e}
 </style>
 </head>
 <body>
-<header><a href="index.html">← Retour à la boutique</a><h1>Passer ma commande</h1></header>
-<main>
-<form id="f">
-<input type="hidden" name="access_key" value="VOTRE_CLE_ICI">
-<input type="hidden" name="subject" value="Nouvelle commande – DEOGRATIAS SOLUTION DÉCOR">
-<input type="hidden" name="from_name" value="Site boutique">
-<input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
-<label for="article">Article commandé</label>
-<input id="article" name="article" required>
-<label for="nom">Nom complet</label>
-<input id="nom" name="nom_complet" required autocomplete="name">
-<label for="tel">Numéro de téléphone</label>
-<input id="tel" name="telephone" type="tel" required autocomplete="tel" placeholder="Ex : 01 90 00 00 00">
-<label for="adr">Adresse de livraison</label>
-<textarea id="adr" name="adresse_livraison" required placeholder="Ville, quartier, repère"></textarea>
-<button type="submit" id="b">Envoyer ma commande</button>
-<p id="msg" role="status"></p>
+<header>
+  <a href="index.html">← Retour à la boutique</a>
+  <h1>Passer ma commande</h1>
+</header>
+<form id="form">
+  <label for="article">Article commandé</label>
+  <input id="article" name="article" readonly>
+  <label for="prix">Prix</label>
+  <input id="prix" name="prix" readonly>
+  <label for="nom">Nom complet</label>
+  <input id="nom" name="nom" required autocomplete="name">
+  <label for="telephone">Numéro de téléphone</label>
+  <input id="telephone" name="telephone" type="tel" required autocomplete="tel" placeholder="+229 ...">
+  <label for="email">Email (facultatif)</label>
+  <input id="email" name="email" type="email" autocomplete="email">
+  <label for="adresse">Adresse de livraison</label>
+  <textarea id="adresse" name="adresse" required></textarea>
+
+  <fieldset>
+    <legend>Mode de paiement</legend>
+    <label class="choix"><input type="radio" name="paiement" value="livraison" checked><span>Payer à la livraison<small>Vous payez quand vous recevez l'article.</small></span></label>
+    <label class="choix"><input type="radio" name="paiement" value="en ligne"><span>Payer en ligne<small>Mobile Money ou carte bancaire, via FedaPay.</small></span></label>
+  </fieldset>
+
+  <button id="envoyer" type="submit">Envoyer ma commande</button>
+  <a id="wa" class="wa" href="#" target="_blank" rel="noopener">Commander par WhatsApp</a>
+  <p id="msg" role="status"></p>
 </form>
-</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script>
+<script src="https://cdn.fedapay.com/checkout.js?v=1.1.7"></script>
 <script>
+/* === À REMPLIR / VÉRIFIER === */
+const EMAILJS_PUBLIC_KEY = "COLLEZ_ICI_PUBLIC_KEY";
+const EMAILJS_SERVICE_ID = "COLLEZ_ICI_SERVICE_ID";
+const EMAILJS_TEMPLATE_ID = "COLLEZ_ICI_TEMPLATE_ID";
+const FEDAPAY_PUBLIC_KEY = "pk_live_oKeXX1TaDms3pgEnXHrDCPAE"; // clé PUBLIQUE uniquement, jamais la clé sk_
+const WHATSAPP = "22990637844";
+/* ============================ */
+
 const p = new URLSearchParams(location.search);
-const a = document.getElementById("article");
-if (p.get("article")) { a.value = p.get("article"); a.readOnly = true; }
-const f = document.getElementById("f"), b = document.getElementById("b"), m = document.getElementById("msg");
-f.addEventListener("submit", async e => {
-  e.preventDefault();
-  b.disabled = true; b.textContent = "Envoi en cours…"; m.textContent = "";
+const montant = parseInt(p.get("prix"), 10) || 0;
+const fmt = n => Number(n).toLocaleString("fr-FR").replace(/\u202f/g," ") + " F CFA";
+const f = document.getElementById("form"), msg = document.getElementById("msg"), bouton = document.getElementById("envoyer");
+f.article.value = p.get("article") || "";
+f.prix.value = montant ? fmt(montant) : "";
+const mode = () => f.paiement.value;
+
+function dire(classe, texte){ msg.className = classe; msg.textContent = texte; }
+function texteWhatsApp(extra){
+  return "Bonjour, je souhaite commander :\nArticle : " + f.article.value + "\nPrix : " + f.prix.value +
+    "\nNom : " + f.nom.value + "\nTéléphone : " + f.telephone.value + "\nAdresse : " + f.adresse.value +
+    "\nPaiement : " + (extra || mode());
+}
+const wa = document.getElementById("wa");
+wa.addEventListener("click", () => { wa.href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(texteWhatsApp()); });
+f.addEventListener("change", () => { bouton.textContent = mode() === "en ligne" ? "Payer en ligne" : "Envoyer ma commande"; });
+
+const emailPret = !EMAILJS_PUBLIC_KEY.startsWith("COLLEZ");
+if (emailPret) emailjs.init({publicKey: EMAILJS_PUBLIC_KEY});
+
+async function envoyerEmail(paiement){
+  if (!emailPret) throw new Error("EmailJS non configuré");
+  await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+    article: f.article.value, prix: f.prix.value, nom: f.nom.value,
+    telephone: f.telephone.value, adresse: f.adresse.value, paiement: paiement
+  });
+}
+
+async function commanderALivraison(){
+  dire("", "Envoi en cours…");
   try {
-    const r = await fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      headers: {"Content-Type": "application/json", "Accept": "application/json"},
-      body: JSON.stringify(Object.fromEntries(new FormData(f)))
-    });
-    const d = await r.json();
-    if (!d.success) throw new Error();
-    f.innerHTML = "<h2>Commande envoyée</h2><p>Merci ! Nous vous appelons très vite pour confirmer la livraison.</p>";
+    await envoyerEmail("À la livraison");
+    dire("ok", "Merci " + f.nom.value + ". Votre commande est bien reçue, nous vous appelons très vite pour confirmer la livraison.");
+    f.reset();
   } catch (err) {
-    m.textContent = "L'envoi a échoué. Réessayez ou écrivez-nous sur WhatsApp au 01 90 63 78 44.";
-    b.disabled = false; b.textContent = "Envoyer ma commande";
+    console.error(err);
+    dire("ko", "L'envoi par email a échoué. Appuyez sur « Commander par WhatsApp » pour nous envoyer votre commande directement.");
   }
+  bouton.disabled = false;
+}
+
+function payerEnLigne(){
+  if (!montant) { dire("ko", "Le prix de l'article est introuvable. Retournez à la boutique et choisissez l'article à nouveau."); bouton.disabled = false; return; }
+  const client = { lastname: f.nom.value };
+  if (f.email.value) client.email = f.email.value;
+  const widget = FedaPay.init({
+    public_key: FEDAPAY_PUBLIC_KEY,
+    transaction: { amount: montant, description: f.article.value },
+    currency: { iso: "XOF" },
+    customer: client,
+    onComplete: async function(resp){
+      if (resp.reason === FedaPay.DIALOG_DISMISSED) {
+        dire("ko", "Paiement annulé. Vous pouvez réessayer ou choisir le paiement à la livraison.");
+        bouton.disabled = false; return;
+      }
+      const id = resp.transaction && resp.transaction.id ? " (transaction " + resp.transaction.id + ")" : "";
+      try { await envoyerEmail("En ligne (FedaPay)" + id); } catch (e) { console.error(e); }
+      dire("ok", "Merci " + f.nom.value + ". Votre paiement est reçu. Nous vous appelons très vite pour la livraison.");
+      f.reset(); bouton.disabled = false;
+    }
+  });
+  widget.open();
+}
+
+f.addEventListener("submit", e => {
+  e.preventDefault();
+  bouton.disabled = true; dire("", "");
+  if (mode() === "en ligne") payerEnLigne(); else commanderALivraison();
 });
 </script>
 </body>
