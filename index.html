@@ -4,47 +4,47 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DEOGRATIAS SOLUTION DÉCOR – Boutique en ligne</title>
+<meta name="description" content="Électroménager, décoration et équipements à Abomey-Calavi. Commandez en ligne, payez à la livraison ou par Mobile Money.">
 <style>
 :root{--nuit:#14305a;--orange:#e8821a;--fond:#f6f7f9;--texte:#1c2433;--gris:#6b7486;--rouge:#c0392b}
 *{box-sizing:border-box}
 body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--fond);color:var(--texte)}
-header{background:var(--nuit);color:#fff;padding:28px 18px 22px}
-header h1{margin:0 0 6px;font-size:1.35rem;line-height:1.25}
-header p{margin:0;color:#c9d4e8;font-size:.95rem}
-.barre{padding:14px 16px 0}
+header{background:var(--nuit);color:#fff;padding:24px 18px 20px}
+.entete{display:flex;gap:14px;align-items:center;margin-bottom:8px}
+.entete img{width:76px;height:76px;border-radius:50%;background:#fff;flex:none;object-fit:cover}
+.entete h1{margin:0;font-size:1.3rem;line-height:1.25}
+header p{margin:0;color:#d5def0;font-size:.95rem;line-height:1.45;max-width:70ch}
+.liens{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.liens a{color:#fff;text-decoration:none;font-weight:600;font-size:.88rem;padding:9px 13px;border:1px solid rgba(255,255,255,.45);border-radius:999px}
+.liens a:focus-visible,.btn:focus-visible,.barre input:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.barre{padding:14px 16px 0;max-width:1100px;margin:auto}
 .barre input{width:100%;padding:12px 14px;border:1px solid #d5dae3;border-radius:10px;font-size:1rem;background:#fff}
 main{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;padding:16px;max-width:1100px;margin:auto}
 .carte{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e3e7ee;display:flex;flex-direction:column}
-.photo{position:relative;aspect-ratio:1/1;background:#e9edf3;display:flex;align-items:center;justify-content:center;font-size:2.4rem}
+.photo{position:relative;aspect-ratio:1/1;background:#eef1f6}
 .photo::before{content:'Photo bientôt disponible';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;font-size:.85rem;color:var(--gris)}
 .photo img{position:relative;width:100%;height:100%;object-fit:contain;background:#fff;display:block}
-.promo{position:absolute;top:8px;left:8px;background:var(--rouge);color:#fff;font-size:.78rem;font-weight:700;padding:3px 8px;border-radius:6px}
+.promo{position:absolute;top:8px;left:8px;z-index:2;background:var(--rouge);color:#fff;font-size:.78rem;font-weight:700;padding:3px 8px;border-radius:6px}
 .infos{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1}
 .nom{font-weight:600;font-size:.95rem;line-height:1.3}
 .prix{font-weight:800;color:var(--nuit);font-size:1.05rem}
 .ancien{color:var(--gris);text-decoration:line-through;font-size:.85rem;margin-left:6px;font-weight:400}
 .btn{margin-top:auto;display:block;text-align:center;background:var(--orange);color:#fff;text-decoration:none;font-weight:700;padding:11px;border-radius:9px}
-.btn:focus-visible,.barre input:focus-visible{outline:3px solid var(--nuit);outline-offset:2px}
-.vide{grid-column:1/-1;text-align:center;color:var(--gris);padding:30px 10px}
-
-.liens{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-.liens a{color:#fff;text-decoration:none;font-weight:600;font-size:.88rem;padding:9px 13px;border:1px solid #5d7aa8;border-radius:999px}
-.liens a:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.vide{grid-column:1/-1;text-align:center;color:var(--gris);padding:30px 10px;background:#fff;border-radius:12px}
 .confiance{max-width:1100px;margin:10px auto 0;padding:22px 18px;background:#fff;border-top:1px solid #e3e7ee;border-bottom:1px solid #e3e7ee}
 .confiance h2{margin:0 0 6px;font-size:1.15rem;color:var(--nuit)}
 .confiance>p{margin:0 0 14px;line-height:1.55;max-width:70ch}
 .confiance ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
 .confiance li{padding-left:14px;border-left:4px solid var(--orange);line-height:1.45}
 .confiance li b{display:block}
-.entete{display:flex;gap:14px;align-items:center;margin-bottom:8px}.entete img{width:76px;height:76px;border-radius:50%;background:#fff;flex:none}.entete h1{margin:0}
-footer{text-align:center;color:var(--gris);font-size:.9rem;padding:20px 16px 30px}
+footer{text-align:center;color:var(--gris);font-size:.9rem;line-height:1.6;padding:20px 16px 30px;background:rgba(255,255,255,.92)}
 footer a{color:var(--nuit);font-weight:600}
 </style>
 </head>
 <body>
 <header>
-  <div class="entete"><img src="images/logo.png" alt="Logo DEOGRATIAS SOLUTION DÉCOR" width="76" height="76"><h1>Bienvenue chez DEOGRATIAS SOLUTION DÉCOR</h1></div>
-  <p><i>Votre satisfaction, notre priorité.</i> Votre boutique d'électroménager, de décoration et d'équipements. Choisissez votre article, nous vous appelons pour confirmer et vous livrer.</p>
+  <div class="entete"><img id="logo" src="images/logo.png" alt="Logo DEOGRATIAS SOLUTION DÉCOR" width="76" height="76"><h1 id="titre">Bienvenue chez DEOGRATIAS SOLUTION DÉCOR</h1></div>
+  <p id="sous-titre">Votre satisfaction, notre priorité. Électroménager, décoration et équipements : choisissez votre article, nous vous appelons pour confirmer et vous livrer.</p>
   <nav class="liens" aria-label="Nos réseaux">
     <a href="https://wa.me/c/22990637844" target="_blank" rel="noopener">Catalogue WhatsApp</a>
     <a href="https://whatsapp.com/channel/0029Vb8YYXD3GJP5tUm5M40A" target="_blank" rel="noopener">Chaîne WhatsApp</a>
@@ -72,34 +72,39 @@ footer a{color:var(--nuit);font-weight:600}
   RCCM : RB/ABC/26 A 137063 · IFU : 0202333944884
 </footer>
 <script>
+const $ = id => document.getElementById(id);
 const fmt = n => n.toLocaleString("fr-FR").replace(/\u202f/g," ") + " F CFA";
+const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const minute = Math.floor(Date.now()/60000);
 let produits = [];
-const EXT = ["jpg","jpeg","png","webp","JPG","JPEG","PNG"];
-function suite(img){const i=+img.dataset.i; if(i>=EXT.length){img.remove();return;} img.dataset.i=i+1; img.src=img.dataset.base+"."+EXT[i];}
-function afficher(filtre=""){
-  const el = document.getElementById("liste");
-  const f = filtre.trim().toLowerCase();
+
+function appliquer(s){
+  if (s.titre) $("titre").textContent = s.titre;
+  if (s.sousTitre) $("sous-titre").textContent = s.sousTitre;
+  if (s.logo) $("logo").src = s.logo;
+  if (s.enTete) document.documentElement.style.setProperty("--nuit", s.enTete);
+  if (s.fondCouleur) document.body.style.backgroundColor = s.fondCouleur;
+  if (s.fondImage) { const b = document.body.style; b.backgroundImage = "url('" + s.fondImage + "')"; b.backgroundSize = "cover"; b.backgroundPosition = "center"; }
+}
+function afficher(filtre){
+  const f = (filtre || "").trim().toLowerCase();
   const liste = produits.filter(p => p.nom.toLowerCase().includes(f));
-  if(!liste.length){ el.innerHTML = '<p class="vide">Aucun article trouvé. Écrivez-nous sur WhatsApp, nous pouvons peut-être le commander pour vous.</p>'; return; }
-  el.innerHTML = liste.map(p => {
+  if (!liste.length) { $("liste").innerHTML = '<p class="vide">Aucun article trouvé. Écrivez-nous sur WhatsApp, nous pouvons peut-être le commander pour vous.</p>'; return; }
+  $("liste").innerHTML = liste.map(p => {
     const remise = p.ancien > p.prix ? Math.round((1 - p.prix/p.ancien)*100) : 0;
     const lien = "commande.html?article=" + encodeURIComponent(p.nom) + "&prix=" + p.prix;
-    return `<article class="carte">
-      <div class="photo">
-        <img src="${p.image}" data-base="${p.image.replace(/\.[^.]+$/,'')}" data-i="1" alt="${p.nom}" loading="lazy" onerror="suite(this)">
-        ${remise ? `<span class="promo">-${remise}%</span>` : ""}
-      </div>
-      <div class="infos">
-        <div class="nom">${p.nom}</div>
-        <div><span class="prix">${fmt(p.prix)}</span>${remise ? `<span class="ancien">${fmt(p.ancien)}</span>` : ""}</div>
-        <a class="btn" href="${lien}">Commander</a>
-      </div>
-    </article>`;
+    return '<article class="carte"><div class="photo">' +
+      '<img src="' + esc(p.image) + '" alt="' + esc(p.nom) + '" width="268" height="268" loading="lazy" decoding="async" onerror="this.remove()">' +
+      (remise ? '<span class="promo">-' + remise + '%</span>' : '') + '</div>' +
+      '<div class="infos"><div class="nom">' + esc(p.nom) + '</div>' +
+      '<div><span class="prix">' + fmt(p.prix) + '</span>' + (remise ? '<span class="ancien">' + fmt(p.ancien) + '</span>' : '') + '</div>' +
+      '<a class="btn" href="' + lien + '">Commander</a></div></article>';
   }).join("");
 }
-fetch("products.json").then(r => r.json()).then(d => { produits = d; afficher(); })
-  .catch(() => { document.getElementById("liste").innerHTML = '<p class="vide">Impossible de charger les articles. Actualisez la page.</p>'; });
-document.getElementById("recherche").addEventListener("input", e => afficher(e.target.value));
+fetch("settings.json?v=" + minute).then(r => r.json()).then(appliquer).catch(() => {});
+fetch("products.json?v=" + minute).then(r => r.json()).then(d => { produits = d; afficher(); })
+  .catch(() => { $("liste").innerHTML = '<p class="vide">Impossible de charger les articles. Actualisez la page.</p>'; });
+$("recherche").addEventListener("input", e => afficher(e.target.value));
 </script>
 </body>
 </html>
